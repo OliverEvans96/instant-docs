@@ -6,13 +6,14 @@ Instant provides a GraphQL-like interface for querying. We call this *InstaQL*.
 
 ## Why InstaQL
 We like the declarative nature of GraphQL queries but are not fans of **a) configuration**
-and and **b) build steps** required to get up and running. To get around **a) and b)** we built InstaQL using only native javascript arrays and objects.
+and **b) build steps** required to get up and running. To get around **a) and b)** we built InstaQL using only native javascript arrays and objects.
 
 ## Fetch namespace
 One of the simpliest queries you can write is to simply get all records of a namespace.
 
 ```javascript
-const data = useQuery({ goals: {} });
+const query = {goals: {}}
+const data = useQuery(query);
 ```
 
 Inspecting `data`, we'll see:
@@ -42,7 +43,8 @@ const data = {goals: doSQL("SELECT * FROM goals")};
 You can fetch multiple namespaces at once:
 
 ```javascript
-const data = useQuery({ goals: {}, todos: {} })
+const query = {goals: {}, todos: {}}
+const data = useQuery(query)
 ```
 
 We will now see data for both namespaces.
@@ -76,18 +78,16 @@ const data = {
 If you want to filter results, you can use the `where` keyword. Here we fetch a specific goal
 
 ```javascript
-const data = useQuery(
-  {
-    "goals": {
-      "$": {
-        "where": {
-          "id": "health"
-        }
+const query = {
+  "goals": {
+    "$": {
+      "where": {
+        "id": "health"
       }
     }
   }
-)
-
+}
+const data = useQuery(query)
 ```
 
 ```javascript
@@ -109,18 +109,17 @@ const data = {goals: doSQL("SELECT * FROM goals WHERE id = 'health'")};
 
 Notice how results are returned as an array. If you want to get query results back as single object you can use the `cardinality` keyword
 ```javascript
-const data = useQuery(
-  {
-    "goals": {
-      "$": {
-        "where": {
-          "id": "health"
-        },
-        "cardinality": "one"
-      }
+const query = {
+  "goals": {
+    "$": {
+      "where": {
+        "id": "health"
+      },
+      "cardinality": "one"
     }
   }
-);
+}
+const data = useQuery(query)
 ```
 
 ```javascript
@@ -134,17 +133,19 @@ console.log(data)
 ```
 
 ## Fetch associations
-Suppose we wanted to fetch goals and their related todos. We could do so as follows:
+We can fetch goals and their related todos.
 
 ```javascript
-const data = useQuery({
-  goals: {
-    todos: {}
-  },
-});
+const query = {
+  "goals": {
+    "todos": {}
+  }
+};
+const data = useQuery(query)
 ```
 
 `goals` would now include nested `todos`
+
 ```javascript
 console.log(data);
 {
@@ -191,11 +192,129 @@ const data = {goals: _goals.map(g => (
 
 Now compare these two approaches with `InstaQL`
 ```javascript
-const data = useQuery({
-  goals: {
-    todos: {}
-  },
-});
+const query = {
+  "goals": {
+    "todos": {}
+  }
+};
+const data = useQuery(query)
 ```
 
 Modern applications often need to render nested relations, `InstaQL` really starts to shine for these use cases.
+
+## Fetch specific associations
+
+### Fetch associations for filtered namespace
+We can fetch a specific record in a namespace as well as it's related associations.
+```javascript
+const query = {
+  "goals": {
+    "$": {
+      "where": {
+        "id": "health"
+      }
+    },
+    "todos": {}
+  }
+}
+const data = useQuery(query);
+```
+
+Which returns
+
+```javascript
+console.log(data);
+{
+  "goals": [
+    {
+      "id": "health",
+      "title": "Get fit!",
+      "todos": [
+        {
+          "id": "protein",
+          "title": "Drink protein"
+        },
+        {
+          "id": "sleep",
+          "title": "Go to bed early"
+        },
+        {
+          "id": "workout",
+          "title": "Go on a run"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Filter namespace by associated values
+Furthermore, we can fetch specific records in a namespace **by values of their associations**
+
+```javascript
+const query = {
+  "goals": {
+    "$": {
+      "where": {
+        "todos.title": "Go on a run"
+      }
+    }
+  }
+}
+const data = useQuery(query);
+```
+
+Returns
+
+```javascript
+console.log(data);
+{
+  "goals": [
+    {
+      "id": "health",
+      "title": "Get fit!"
+    }
+  ]
+}
+```
+
+### Filter associations
+We can also filter the associations themselves
+
+```javascript
+const query = {
+  "goals": {
+    "$": {
+      "where": {
+        "todos.title": "Go on a run"
+      }
+    }
+  }
+}
+const data = useQuery(query)
+```
+
+This will return goals and filtered todos
+
+```javascript
+console.log(data)
+{
+  "goals": [
+    {
+      "id": "health",
+      "title": "Get fit!",
+      "todos": [
+        {
+          "id": "workout",
+          "title": "Go on a run"
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "title": "Get promoted!",
+      "todos": []
+    }
+  ]
+}
+```
