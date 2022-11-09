@@ -3,7 +3,7 @@ import Image from 'next/future/image'
 import InstantLogo from '@/images/playful_sun.svg'
 
 export function LogoImage(props) {
-  return <Image src={InstantLogo} width={27} {...props} />;
+  return <Image src={InstantLogo} alt="Instant Logo" width={27} {...props} />;
 }
 
 export function Logo() {
@@ -11,10 +11,10 @@ export function Logo() {
     <span className="inline-flex space-x-2">
       <LogoImage />
       <div>
-        <span className="font-mono text-lg font-bold lowercase text-white">
+          <span className="font-mono text-lg font-bold lowercase dark:text-white">
           Instant
         </span>
-        <div className="font-mono text-xs uppercase text-gray-400">
+          <div className="font-mono text-xs uppercase dark:text-gray-400">
           Hacker Preview
         </div>
       </div>

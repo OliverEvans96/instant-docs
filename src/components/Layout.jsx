@@ -10,6 +10,8 @@ import { Prose } from '@/components/Prose'
 import { Search } from '@/components/Search'
 import { ThemeSelector } from '@/components/ThemeSelector'
 
+const docsRepo = 'https://github.com/jsventures/instant-docs';
+
 const navigation = [
   {
     title: 'Introduction',
@@ -18,13 +20,20 @@ const navigation = [
     ],
   },
   {
+    title: 'API Reference',
+    links: [
+      { title: 'Init', href: '/docs/initialization' },
+      { title: 'InstaQL', href: '/docs/querying' },
+      { title: 'Pagination', href: '/docs/pagination' },
+      { title: 'Recursive Queries', href: '/docs/recursive-queries' },
+      { title: 'InstaML', href: '/docs/mutations' },
+    ],
+  },
+  {
     title: 'Contributing',
     links: [
       { title: 'How to contribute', href: '/docs/how-to-contribute' },
-      {
-        title: 'Motivation and Architecture',
-        href: '/docs/architecture-guide',
-      },
+      { title: 'Motivation and Architecture', href: '/docs/architecture-guide' },
     ],
   },
 ]
@@ -68,12 +77,13 @@ function Header({ navigation }) {
           <Logo className="hidden h-9 w-auto fill-slate-700 dark:fill-sky-100 lg:block" />
         </Link>
       </div>
-      <div className="-my-5 mr-6 sm:mr-8 md:mr-0">
+      {/* Disable search for now since we don't have algolia integration yet */}
+      {false && <div className="-my-5 mr-6 sm:mr-8 md:mr-0">
         <Search />
-      </div>
+      </div>}
       <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
         <ThemeSelector className="relative z-10" />
-        <Link href="https://github.com" className="group" aria-label="GitHub">
+        <Link href={docsRepo} className="group" aria-label="GitHub">
           <GitHubIcon className="h-6 w-6 fill-slate-400 group-hover:fill-slate-500 dark:group-hover:fill-slate-300" />
         </Link>
       </div>
