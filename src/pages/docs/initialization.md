@@ -2,9 +2,18 @@
 title: Init API
 ---
 
-Before you can query or mutate, make sure `useInit` is called in your component tree.
+Before using `useQuery` or `transact`, make sure `useInit` is called in your component tree.
 
 ```javascript
+import { useEffect } from "react";
+
+import {
+  useInit,
+  useQuery,
+  tx,
+  transact,
+} from "@instantdb/react";
+
 function App() {
   const [isLoading, error, auth] = useInit({
     appId: APP_ID,
@@ -19,22 +28,37 @@ function App() {
   if (error) {
     return <div>Oi! {error?.message}</div>;
   }
-  // Optionally render an authentication flow if client is not authed
-  if (!auth) {
-    ...
-  }
-  return <Main />;
+  return <Counter />;
 }
 ```
 
-You can now use `useQuery` throughout your component tree
+You can now use `useQuery` and `transact` throughout your component tree
 ```javascript
-function Main() {
-  const data = useQuery(...);
+function Counter() {
+  const query = {
+    "counter": {
+      "$": {
+        "where": {
+          "id": "singleton"
+        },
+        "cardinality": "one"
+      }
+    }
+  }
+  const { counter } = useQuery(query)
+  const count = counter?.count || 0;
+  useEffect(() => {
+    if (!count) {
+      transact([tx.counter['singleton'].update({count: 1})])
+    }
+  }, [])
   return (
-    ...
+    <button onClick={() => transact([
+        tx.counter['singleton'].update({count: count + 1})
+      ])
+    }>
+      {count}
+    </button>
   );
 }
-
-export default App;
 ```
