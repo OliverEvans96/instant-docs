@@ -10,4 +10,4 @@ Instant is the Modern Firebase. With Instant you can easily build realtime and c
 
 ## Quick start
 
-To the adventure!
+Coming soon :)

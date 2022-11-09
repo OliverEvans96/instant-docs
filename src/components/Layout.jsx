@@ -24,8 +24,6 @@ const navigation = [
     links: [
       { title: 'Init', href: '/docs/initialization' },
       { title: 'InstaQL', href: '/docs/querying' },
-      { title: 'Pagination', href: '/docs/pagination' },
-      { title: 'Recursive Queries', href: '/docs/recursive-queries' },
       { title: 'InstaML', href: '/docs/mutations' },
     ],
   },
