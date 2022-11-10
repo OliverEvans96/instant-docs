@@ -10,28 +10,29 @@ import { Prose } from '@/components/Prose'
 import { Search } from '@/components/Search'
 import { ThemeSelector } from '@/components/ThemeSelector'
 
-const docsRepo = 'https://github.com/jsventures/instant-docs';
+const docsRepo = 'https://github.com/jsventures/instant-docs'
 
 const navigation = [
   {
     title: 'Introduction',
-    links: [
-      { title: 'Getting started', href: '/' },
-    ],
+    links: [{ title: 'Getting started', href: '/' }],
   },
   {
-    title: 'API Reference',
+    title: 'Explore',
     links: [
-      { title: 'Init', href: '/docs/initialization' },
-      { title: 'InstaQL', href: '/docs/querying' },
-      { title: 'InstaML', href: '/docs/mutations' },
+      { title: 'useInit', href: '/docs/useinit' },
+      { title: 'InstaQL', href: '/docs/instaql' },
+      { title: 'InstaML', href: '/docs/instaml' },
     ],
   },
   {
     title: 'Contributing',
     links: [
       { title: 'How to contribute', href: '/docs/how-to-contribute' },
-      { title: 'Motivation and Architecture', href: '/docs/architecture-guide' },
+      {
+        title: 'Motivation and Architecture',
+        href: '/docs/architecture-guide',
+      },
     ],
   },
 ]
@@ -76,9 +77,11 @@ function Header({ navigation }) {
         </Link>
       </div>
       {/* Disable search for now since we don't have algolia integration yet */}
-      {false && <div className="-my-5 mr-6 sm:mr-8 md:mr-0">
-        <Search />
-      </div>}
+      {false && (
+        <div className="-my-5 mr-6 sm:mr-8 md:mr-0">
+          <Search />
+        </div>
+      )}
       <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
         <ThemeSelector className="relative z-10" />
         <Link href={docsRepo} className="group" aria-label="GitHub">

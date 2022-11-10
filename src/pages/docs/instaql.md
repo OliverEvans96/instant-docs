@@ -2,7 +2,7 @@
 title: InstaQL
 ---
 
-Instant provides a GraphQL-like interface for querying. We call this *InstaQL*.
+Instant provides a **GraphQL-like** interface for querying. We call our query language **InstaQL**
 
 ## Why InstaQL
 We like the declarative nature of GraphQL queries but are not fans of **a) configuration**
@@ -36,7 +36,7 @@ Here we have:
 * todos `workout`, `protein`, and `sleep` are associated with goal `health`
 * todos `standup`, `reviewPRs`, and `focus` are associated with goal `work`
 ---
-One of the simpliest queries you can write is to simply get all records of a namespace.
+One of the simpliest queries you can write is to simply get all entities of a namespace.
 
 ```javascript
 const query = {goals: {}}
@@ -101,8 +101,8 @@ const data = {
 }
 ```
 
-## Fetch a specific record
-If you want to filter results, you can use the `where` keyword. Here we fetch a specific goal
+## Fetch a specific entity
+If you want to filter entities, you can use the `where` keyword. Here we fetch a specific goal
 
 ```javascript
 const query = {
@@ -232,7 +232,7 @@ Modern applications often need to render nested relations, `InstaQL` really star
 ## Fetch specific associations
 
 ### A) Fetch associations for filtered namespace
-We can fetch a specific record in a namespace as well as it's related associations.
+We can fetch a specific entity in a namespace as well as it's related associations.
 ```javascript
 const query = {
   "goals": {

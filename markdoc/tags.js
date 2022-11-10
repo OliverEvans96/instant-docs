@@ -43,6 +43,18 @@ const tags = {
       href: { type: String },
     },
   },
+  "blank-link": {
+    selfClosing: true,
+    attributes: {
+      href: { type: String },
+      label: { type: String },
+    },
+    render: ({ href, label }) => (
+      <a href={href} target="_blank" rel="noreferrer">
+        {label}
+      </a>
+    ),
+  },
   'sandbox-link': {
     selfClosing: true,
     render: CodeSandboxLink,

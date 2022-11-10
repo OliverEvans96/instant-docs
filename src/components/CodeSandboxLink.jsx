@@ -35,10 +35,44 @@ function Button({ onClick, label }) {
 function Main() {
   const query = { goals: { todos: {} } };
   const data = useQuery(query);
+  const goalIds = data.goals.map(g => g.id)
+  const todoIds = data.goals.flatMap(g => g.todos.map(t => t.id))
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-      {!data.goals.length && <div>Hit the button below to generate some data!</div>}
+      <Button
+        onClick={() => {
+          transact([
+            tx.goals["health"].update({ title: "Get fit!" }),
+            tx.goals["work"].update({ title: "Get promoted!" })
+
+          ]);
+        }}
+        label="Create goals"
+      />
+      <Button
+        onClick={() => {
+          transact([
+            tx.goals[id()].update({
+              priority: "none",
+              isSecret: true,
+              value: 10,
+              aList: [1, 2, 3],
+              anObject: {foo: "bar"},
+              title: ["eat", "sleep", "hack", "repeat"][Math.floor(Math.random() * 4)]})
+          ]);
+        }}
+        label="Create random goal"
+      />
+      <Button
+        onClick={() => {
+          transact([
+            ...goalIds.map(id => tx.goals[id].delete()),
+           ...todoIds.map(id => tx.todos[id].delete())
+          ]);
+        }}
+        label="Delete data"
+      />
       <Button
         onClick={() => {
           transact([
@@ -49,33 +83,31 @@ function Main() {
             tx.todos["reviewPRs"].update({ title: "Review PRs" }),
             tx.todos["focus"].update({ title: "Code a bunch" }),
             tx.goals["health"]
-              .update({ title: "Get fit!" })
               .link({ todos: "workout" })
               .link({ todos: "protein" })
               .link({ todos: "sleep" }),
             tx.goals["work"]
-              .update({ title: "Get promoted!" })
               .link({ todos: "standup" })
               .link({ todos: "reviewPRs" })
               .link({ todos: "focus" }),
           ]);
         }}
-        label="Create Data"
+        label="Link goals and todos"
       />
       <Button
         onClick={() => {
           transact([
-            tx.todos["workout"].delete(),
-            tx.todos["protein"].delete(),
-            tx.todos["sleep"].delete(),
-            tx.todos["standup"].delete(),
-            tx.todos["reviewPRs"].delete(),
-            tx.todos["focus"].delete(),
-            tx.goals["health"].delete(),
-            tx.goals["work"].delete(),
+            tx.goals["health"]
+              .unlink({todos: "workout"})
+              .unlink({todos: "protein"})
+              .unlink({todos: "sleep"}),
+            tx.goals["work"]
+              .unlink({ todos: "standup" })
+              .unlink({ todos: "reviewPRs" })
+              .unlink({ todos: "focus" }),
           ]);
         }}
-        label="Delete Data"
+        label="Unlink goals and todos"
       />
     </div>
   );
