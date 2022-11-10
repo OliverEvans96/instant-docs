@@ -1,3 +1,4 @@
+import { CodeSandboxLink } from '@/components/CodeSandboxLink'
 import { Callout } from '@/components/Callout'
 import { QuickLink, QuickLinks } from '@/components/QuickLinks'
 
@@ -40,6 +41,18 @@ const tags = {
       description: { type: String },
       icon: { type: String },
       href: { type: String },
+    },
+  },
+  'sandbox-link': {
+    selfClosing: true,
+    render: CodeSandboxLink,
+    attributes: {
+      type: {
+        type: String,
+        matches: ['goals-and-todos'],
+        errorLevel: 'critical',
+      },
+      label: { type: String },
     },
   },
 }
