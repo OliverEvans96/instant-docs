@@ -43,7 +43,7 @@ const tags = {
       href: { type: String },
     },
   },
-  "blank-link": {
+  'blank-link': {
     selfClosing: true,
     attributes: {
       href: { type: String },
@@ -61,7 +61,7 @@ const tags = {
     attributes: {
       type: {
         type: String,
-        matches: ['goals-and-todos'],
+        matches: ['goals-and-todos', 'counter-example'],
         errorLevel: 'critical',
       },
       label: { type: String },

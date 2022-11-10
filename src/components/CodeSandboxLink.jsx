@@ -1,5 +1,71 @@
 import reactSandboxURI from '@/components/reactSandboxURI'
 
+const counterExample = `
+import { useEffect } from 'react'
+
+import { useInit, useQuery, tx, transact } from '@instantdb/react'
+
+const APP_ID = 'REPLACE ME'
+
+function App() {
+  const [isLoading, error, auth] = useInit({
+    appId: APP_ID,
+    websocketURI: 'wss://instant-server-clj.herokuapp.com/api/runtime/sync',
+    apiURI: 'https://instant-server-clj.herokuapp.com/api',
+  })
+  if (isLoading) {
+    return (
+      <div>
+        If you are seeing this you likely need to replace <b>APP_ID</b> on line
+        5<br />
+        <br />
+        You can get your APP_ID by{' '}
+        <a href="https://instantdb.com/dash" target="_blank" rel="noreferrer">
+          logging into your Instant dashboard
+        </a>
+        . After replacing the id you may need to reload the page.
+
+      </div>
+    )
+  }
+  if (error) {
+    return <div>Oi! {error?.message}</div>
+  }
+  return <Counter />
+}
+
+function Counter() {
+  const query = {
+    counter: {
+      $: {
+        where: {
+          id: 'singleton',
+        },
+        cardinality: 'one',
+      },
+    },
+  }
+  const { counter } = useQuery(query)
+  const count = counter?.count || 0
+  useEffect(() => {
+    if (!count) {
+      transact([tx.counter['singleton'].update({ count: 1 })])
+    }
+  }, [])
+  return (
+    <button
+      onClick={() =>
+        transact([tx.counter['singleton'].update({ count: count + 1 })])
+      }
+    >
+      {count}
+    </button>
+  )
+}
+
+export default App
+`.trim()
+
 const goalsAndTodosExample = `
 import { useInit, useQuery, tx, transact, id, auth } from "@instantdb/react";
 
@@ -117,6 +183,7 @@ export default App;
 `.trim()
 
 const uris = {
+  'counter-example': reactSandboxURI(counterExample),
   'goals-and-todos': reactSandboxURI(goalsAndTodosExample),
 }
 
