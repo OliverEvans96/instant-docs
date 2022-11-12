@@ -83,7 +83,8 @@ function Header({ navigation }) {
         </div>
       )}
       <div className="relative flex basis-0 justify-end gap-6 sm:gap-8 md:flex-grow">
-        <ThemeSelector className="relative z-10" />
+        {/* Disable theme selector since we only want dark mode for now */}
+        {false && <ThemeSelector className="relative z-10" />}
         <Link href={docsRepo} className="group" aria-label="GitHub">
           <GitHubIcon className="h-6 w-6 fill-slate-400 group-hover:fill-slate-500 dark:group-hover:fill-slate-300" />
         </Link>
