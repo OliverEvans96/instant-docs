@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Script from 'next/script'
 import { slugifyWithCounter } from '@sindresorhus/slugify'
 
 import { Layout } from '@/components/Layout'
@@ -92,6 +93,19 @@ export default function App({ Component, pageProps }) {
       <Layout title={title} tableOfContents={tableOfContents}>
         <Component {...pageProps} />
       </Layout>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-F1F1CC1GG0"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-F1F1CC1GG0');
+        `}
+      </Script>
     </>
   )
 }
