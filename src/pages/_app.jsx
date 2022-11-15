@@ -8,6 +8,8 @@ import 'focus-visible'
 import '@/styles/tailwind.css'
 import '@/styles/globals.css'
 
+const gtagID = process.env.GTAG_ID
+
 function getNodeText(node) {
   let text = ''
   for (let child of node.children ?? []) {
@@ -93,19 +95,23 @@ export default function App({ Component, pageProps }) {
       <Layout title={title} tableOfContents={tableOfContents}>
         <Component {...pageProps} />
       </Layout>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-F1F1CC1GG0"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
+      {gtagID && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtagID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-F1F1CC1GG0');
+          gtag('config', ${gtagID});
         `}
-      </Script>
+          </Script>
+        </>
+      )}
     </>
   )
 }
