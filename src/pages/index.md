@@ -35,8 +35,8 @@ const APP_ID = 'REPLACE ME'
 function App() {
   const [isLoading, error, auth] = useInit({
     appId: APP_ID,
-    websocketURI: 'wss://instant-server-clj.herokuapp.com/api/runtime/sync',
-    apiURI: 'https://instant-server-clj.herokuapp.com/api',
+    websocketURI: 'wss://api.instantdb.com/runtime/sync',
+    apiURI: 'https://api.instantdb.com',
   })
   if (isLoading) {
     return (
