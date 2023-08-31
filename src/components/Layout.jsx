@@ -20,7 +20,7 @@ const navigation = [
   {
     title: 'Explore',
     links: [
-      { title: 'useInit', href: '/docs/useinit' },
+      { title: 'Init', href: '/docs/init' },
       { title: 'InstaQL', href: '/docs/instaql' },
       { title: 'InstaML', href: '/docs/instaml' },
     ],
