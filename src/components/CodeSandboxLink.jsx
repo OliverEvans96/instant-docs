@@ -64,8 +64,7 @@ export default App;
 const goalsAndTodosExample = `
 import { init, useQuery, tx, transact, id } from "@instantdb/react";
 
-// const APP_ID = 'REPLACE ME'
-const APP_ID = "e8a4ab79-fce6-4372-bf04-c3ba7ad98d33";
+const APP_ID = 'REPLACE ME'
 
 init({
   appId: APP_ID,
