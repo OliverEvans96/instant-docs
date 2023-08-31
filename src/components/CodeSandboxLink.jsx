@@ -22,7 +22,7 @@ function App() {
       },
     },
   };
-  const { isLoading, _error, data } = useQuery(query);
+  const { isLoading, error, data } = useQuery(query);
   if (isLoading) {
     return (
       <div>
@@ -82,7 +82,7 @@ const workId = id();
 
 function App() {
   const query = { goals: { todos: {} } };
-  const { isLoading, _error, data } = useQuery(query);
+  const { isLoading, error, data } = useQuery(query);
   if (isLoading) {
     return (
       <div>

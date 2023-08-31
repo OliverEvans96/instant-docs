@@ -58,7 +58,7 @@ One of the simpliest queries you can write is to simply get all entities of a na
 
 ```javascript
 const query = { goals: {} }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 Inspecting `data`, we'll see:
@@ -91,7 +91,7 @@ You can fetch multiple namespaces at once:
 
 ```javascript
 const query = { goals: {}, todos: {} }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 We will now see data for both namespaces.
@@ -137,7 +137,7 @@ const query = {
     },
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 ```javascript
@@ -171,7 +171,7 @@ const query = {
     },
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 ```javascript
@@ -194,7 +194,7 @@ const query = {
     todos: {},
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 `goals` would now include nested `todos`
@@ -253,7 +253,7 @@ const query = {
     todos: {},
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 Modern applications often need to render nested relations, `InstaQL` really starts to shine for these use cases.
@@ -275,7 +275,7 @@ const query = {
     todos: {},
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 Which returns
@@ -321,7 +321,7 @@ const query = {
     todos: {},
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 Returns
@@ -366,7 +366,7 @@ const query = {
     },
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 This will return goals and filtered todos
@@ -417,7 +417,7 @@ const query = {
     goals: {},
   },
 }
-const [_isLoading, _error, data] = useQuery(query)
+const { isLoading, error, data } = useQuery(query)
 ```
 
 ```javascript

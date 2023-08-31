@@ -144,7 +144,8 @@ You can generate an array of `delete` txs to delete all entities in a namespace
 
 ```javascript
 
-const { _isLoading, _error, data } = useQuery({goals: {}}
+
+const { isLoading, error, data } = useQuery({goals: {}}
 const { goals } = data;
 ...
 transact(goals.map(g => tx.goals[g.id].delete()));
@@ -209,7 +210,7 @@ This creates:
 We can query associations in both directions via these links
 
 ```javascript
-const { _isLoading, _error, data } = useQuery({
+const { isLoading, error, data } = useQuery({
   goals: { todos: {} },
   todos: { goals: {} },
 })
