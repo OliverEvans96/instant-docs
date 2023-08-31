@@ -158,32 +158,6 @@ The SQL equivalent would be:
 const data = { goals: doSQL("SELECT * FROM goals WHERE id = 'health'") }
 ```
 
-Notice how results are returned as an array. If you want to get query results back as single object you can use the `cardinality` keyword
-
-```javascript
-const query = {
-  goals: {
-    $: {
-      where: {
-        id: 'health',
-      },
-      cardinality: 'one',
-    },
-  },
-}
-const { isLoading, error, data } = useQuery(query)
-```
-
-```javascript
-console.log(data)
-{
-  "goals": {
-    "id": healthId,
-    "title": "Get fit!"
-  }
-}
-```
-
 ## Fetch associations
 
 We can fetch goals and their related todos.
