@@ -1,10 +1,10 @@
-import LZString from 'lz-string';
+import LZString from 'lz-string'
 
 function compress(string) {
   return LZString.compressToBase64(string)
     .replace(/\+/g, `-`) // Convert '+' to '-'
     .replace(/\//g, `_`) // Convert '/' to '_'
-    .replace(/=+$/, ``); // Remove ending '='
+    .replace(/=+$/, ``) // Remove ending '='
 }
 
 const PACKAGE_JSON = {
@@ -18,19 +18,19 @@ const PACKAGE_JSON = {
     react: '18.0.0',
     'react-dom': '18.0.0',
     'react-scripts': '4.0.0',
-    '@instantdb/react': '^0.2.1',
+    '@instantdb/react': '^0.3.1',
   },
   devDependencies: {
     '@babel/runtime': '7.13.8',
     typescript: '4.1.3',
   },
-};
+}
 
 const INDEX_CSS = `
 body {
   font-family: sans-serif;
 }
-`.trim();
+`.trim()
 
 const INDEX_JS = `
 import "./index.css";
@@ -46,7 +46,7 @@ root.render(
   <StrictMode>
     <App />
   </StrictMode>
-);`.trim();
+);`.trim()
 
 const INDEX_HTML = `
 <!DOCTYPE html>
@@ -91,7 +91,7 @@ const INDEX_HTML = `
     -->
 </body>
 </html>
-`.trim();
+`.trim()
 
 export default function reactSandboxURI(appJSCode) {
   let parameters = {
@@ -112,9 +112,9 @@ export default function reactSandboxURI(appJSCode) {
         content: INDEX_HTML,
       },
     },
-  };
+  }
 
   return `https://codesandbox.io/api/v1/sandboxes/define?parameters=${compress(
     JSON.stringify(parameters)
-  )}`;
+  )}`
 }

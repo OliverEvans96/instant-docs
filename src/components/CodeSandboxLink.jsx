@@ -1,18 +1,28 @@
 import reactSandboxURI from '@/components/reactSandboxURI'
 
 const counterExample = `
-import { useEffect } from 'react'
-
-import { useInit, useQuery, tx, transact } from '@instantdb/react'
+import { init, useQuery, tx, transact } from "@instantdb/react";
 
 const APP_ID = 'REPLACE ME'
 
+init({
+  appId: APP_ID,
+  websocketURI: "wss://api.instantdb.com/runtime/session",
+});
+
+const singletonId = "0c1b1794-87de-4b3c-8f11-b7b66290ffb0";
+
 function App() {
-  const [isLoading, error, auth] = useInit({
-    appId: APP_ID,
-    websocketURI: 'wss://api.instantdb.com/runtime/sync',
-    apiURI: 'https://api.instantdb.com',
-  })
+  const query = {
+    counters: {
+      $: {
+        where: {
+          id: singletonId,
+        },
+      },
+    },
+  };
+  const { isLoading, _error, data } = useQuery(query);
   if (isLoading) {
     return (
       <div>
@@ -28,66 +38,69 @@ function App() {
       </div>
     )
   }
-  if (error) {
-    return <div>Oi! {error?.message}</div>
-  }
-  return <Counter />
+
+  return <Counter data={data} />;
 }
 
-function Counter() {
-  const query = {
-    counter: {
-      $: {
-        where: {
-          id: 'singleton',
-        },
-        cardinality: 'one',
-      },
-    },
-  }
-  const { counter } = useQuery(query)
-  const count = counter?.count || 0
-  useEffect(() => {
-    if (!count) {
-      transact([tx.counter['singleton'].update({ count: 1 })])
-    }
-  }, [])
+function Counter({ data }) {
+  const counter = data.counters[0];
+  console.log("⚡ + " + JSON.stringify(counter));
+  const count = counter?.count || 0;
+
   return (
     <button
       onClick={() =>
-        transact([tx.counter['singleton'].update({ count: count + 1 })])
+        transact([tx.counters[singletonId].update({ count: count + 1 })])
       }
     >
       {count}
     </button>
-  )
+  );
 }
 
-export default App
+export default App;
 `.trim()
 
 const goalsAndTodosExample = `
-import { useInit, useQuery, tx, transact, id, auth } from "@instantdb/react";
+import { init, useQuery, tx, transact, id } from "@instantdb/react";
 
-const APP_ID = "REPLACE ME";
+// const APP_ID = 'REPLACE ME'
+const APP_ID = "e8a4ab79-fce6-4372-bf04-c3ba7ad98d33";
+
+init({
+  appId: APP_ID,
+  websocketURI: "wss://api.instantdb.com/runtime/session",
+});
+
+const workoutId = id();
+const proteinId = id();
+const sleepId = id();
+const standupId = id();
+const reviewPRsId = id();
+const focusId = id();
+const healthId = id();
+const workId = id();
 
 function App() {
-  const [isLoading, error, auth] = useInit({
-    appId: APP_ID,
-    websocketURI: 'wss://api.instantdb.com/runtime/sync',
-    apiURI: 'https://api.instantdb.com',
-  });
+  const query = { goals: { todos: {} } };
+  const { isLoading, _error, data } = useQuery(query);
   if (isLoading) {
-    return <div>
-      If you're seeing this you likely need to replace <b>APP_ID</b> on line 3<br/><br/>
-      {" "}You can get your APP_ID by <a href="https://instantdb.com/dash" target="_blank">logging into your Instant dashboard</a>. After replacing the id you may need to hit the codesandbox "reload" icon.
-    </div>;
-  }
-  if (error) {
-    return <div>Oi! {error?.message}</div>;
+    return (
+      <div>
+        If you are seeing this you likely need to replace <b>APP_ID</b> on line
+        5<br />
+        <br />
+        You can get your APP_ID by{' '}
+        <a href="https://instantdb.com/dash" target="_blank" rel="noreferrer">
+          logging into your Instant dashboard
+        </a>
+        . After replacing the id you may need to reload the page.
+
+      </div>
+    )
   }
 
-  return <Main />;
+  return <Main data={data} />;
 }
 
 function Button({ onClick, label }) {
@@ -98,9 +111,7 @@ function Button({ onClick, label }) {
   );
 }
 
-function Main() {
-  const query = { goals: { todos: {} } };
-  const data = useQuery(query);
+function Main({ data }) {
   const goalIds = data.goals.map(g => g.id)
   const todoIds = data.goals.flatMap(g => g.todos.map(t => t.id))
   return (
@@ -109,8 +120,8 @@ function Main() {
       <Button
         onClick={() => {
           transact([
-            tx.goals["health"].update({ title: "Get fit!" }),
-            tx.goals["work"].update({ title: "Get promoted!" })
+            tx.goals[healthId].update({ title: "Get fit!" }),
+            tx.goals[workId].update({ title: "Get promoted!" })
 
           ]);
         }}
@@ -123,9 +134,7 @@ function Main() {
               priority: "none",
               isSecret: true,
               value: 10,
-              aList: [1, 2, 3],
-              anObject: {foo: "bar"},
-              title: ["eat", "sleep", "hack", "repeat"][Math.floor(Math.random() * 4)]})
+              title: ["eat", sleepId, "hack", "repeat"][Math.floor(Math.random() * 4)]})
           ]);
         }}
         label="Create random goal"
@@ -142,35 +151,35 @@ function Main() {
       <Button
         onClick={() => {
           transact([
-            tx.todos["workout"].update({ title: "Go on a run" }),
-            tx.todos["protein"].update({ title: "Drink protein" }),
-            tx.todos["sleep"].update({ title: "Go to bed early" }),
-            tx.todos["standup"].update({ title: "Do standup" }),
-            tx.todos["reviewPRs"].update({ title: "Review PRs" }),
-            tx.todos["focus"].update({ title: "Code a bunch" }),
-            tx.goals["health"]
-              .link({ todos: "workout" })
-              .link({ todos: "protein" })
-              .link({ todos: "sleep" }),
-            tx.goals["work"]
-              .link({ todos: "standup" })
-              .link({ todos: "reviewPRs" })
-              .link({ todos: "focus" }),
-          ]);
+            tx.todos[workoutId].update({title: "Go on a run"}),
+            tx.todos[proteinId].update({title: "Drink protein"}),
+            tx.todos[sleepId].update({title: "Go to bed early"}),
+            tx.todos[standupId].update({title: "Do standup"}),
+            tx.todos[reviewPRsId].update({title: "Review PRs"}),
+            tx.todos[focusId].update({title: "Code a bunch"}),
+            tx.goals[healthId].update({title: "Get fit!"})
+              .link({ todos: workoutId})
+              .link({ todos: proteinId})
+              .link({ todos: sleepId}),
+            tx.goals[workId].update({title: "Get promoted!"})
+              .link({ todos: standupId})
+              .link({ todos: reviewPRsId})
+              .link({ todos: focusId})
+          ])
         }}
         label="Link goals and todos"
       />
       <Button
         onClick={() => {
           transact([
-            tx.goals["health"]
-              .unlink({todos: "workout"})
-              .unlink({todos: "protein"})
-              .unlink({todos: "sleep"}),
-            tx.goals["work"]
-              .unlink({ todos: "standup" })
-              .unlink({ todos: "reviewPRs" })
-              .unlink({ todos: "focus" }),
+            tx.goals[healthId]
+              .unlink({todos: workoutId})
+              .unlink({todos: proteinId})
+              .unlink({todos: sleepId}),
+            tx.goals[workId]
+              .unlink({ todos: standupId })
+              .unlink({ todos: reviewPRsId })
+              .unlink({ todos: focusId }),
           ]);
         }}
         label="Unlink goals and todos"

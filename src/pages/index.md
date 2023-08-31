@@ -26,18 +26,28 @@ npm start
 Now open up `src/App.js` in your favorite editor and replace the entirity of the file with the following code.
 
 ```javascript
-import { useEffect } from 'react'
-
-import { useInit, useQuery, tx, transact } from '@instantdb/react'
+import { init, useQuery, tx, transact } from '@instantdb/react'
 
 const APP_ID = 'REPLACE ME'
 
+init({
+  appId: APP_ID,
+  websocketURI: 'wss://api.instantdb.com/runtime/session',
+})
+
+const singletonId = '0c1b1794-87de-4b3c-8f11-b7b66290ffb0'
+
 function App() {
-  const [isLoading, error, auth] = useInit({
-    appId: APP_ID,
-    websocketURI: 'wss://api.instantdb.com/runtime/sync',
-    apiURI: 'https://api.instantdb.com',
-  })
+  const query = {
+    counters: {
+      $: {
+        where: {
+          id: singletonId,
+        },
+      },
+    },
+  }
+  const { isLoading, _error, data } = useQuery(query)
   if (isLoading) {
     return (
       <div>
@@ -52,34 +62,19 @@ function App() {
       </div>
     )
   }
-  if (error) {
-    return <div>Oi! {error?.message}</div>
-  }
-  return <Counter />
+
+  return <Counter data={data} />
 }
 
-function Counter() {
-  const query = {
-    counter: {
-      $: {
-        where: {
-          id: 'singleton',
-        },
-        cardinality: 'one',
-      },
-    },
-  }
-  const { counter } = useQuery(query)
+function Counter({ data }) {
+  const counter = data.counters[0]
+  console.log('⚡ + ' + JSON.stringify(counter))
   const count = counter?.count || 0
-  useEffect(() => {
-    if (!count) {
-      transact([tx.counter['singleton'].update({ count: 1 })])
-    }
-  }, [])
+
   return (
     <button
       onClick={() =>
-        transact([tx.counter['singleton'].update({ count: count + 1 })])
+        transact([tx.counters[singletonId].update({ count: count + 1 })])
       }
     >
       {count}

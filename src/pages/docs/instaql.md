@@ -14,30 +14,43 @@ and **b) build steps** required to get up and running. To get around **a) and b)
 These next sections will use the following sample data:
 
 ```javascript
+import { id } from '@instantdb/react'
+
+const workoutId = id()
+const proteinId = id()
+const sleepId = id()
+const standupId = id()
+const reviewPRsId = id()
+const focusId = id()
+const healthId = id()
+const workId = id()
+
 transact([
-  tx.todos["workout"].update({title: "Go on a run"}),
-  tx.todos["protein"].update({title: "Drink protein"}),
-  tx.todos["sleep"].update({title: "Go to bed early"}),
-  tx.todos["standup"].update({title: "Do standup"}),
-  tx.todos["reviewPRs"].update({title: "Review PRs"}),
-  tx.todos["focus"].update({title: "Code a bunch"}),
-  tx.goals["health"].update({title: "Get fit!"})
-    .link({ todo: "workout"})
-    .link({ todo: "protein"})
-    .link({ todo: "sleep"})
-  tx.goals["work"].update({title: "Get promoted!"})
-    .link({ todo: "standup"})
-    .link({ todo: "reviewPRs"})
-    .link({ todo: "focus"})
+  tx.todos[workoutId].update({ title: 'Go on a run' }),
+  tx.todos[proteinId].update({ title: 'Drink protein' }),
+  tx.todos[sleepId].update({ title: 'Go to bed early' }),
+  tx.todos[standupId].update({ title: 'Do standup' }),
+  tx.todos[reviewPRsId].update({ title: 'Review PRs' }),
+  tx.todos[focusId].update({ title: 'Code a bunch' }),
+  tx.goals[healthId]
+    .update({ title: 'Get fit!' })
+    .link({ todos: workoutId })
+    .link({ todos: proteinId })
+    .link({ todos: sleepId }),
+  tx.goals[workId]
+    .update({ title: 'Get promoted!' })
+    .link({ todos: standupId })
+    .link({ todos: reviewPRsId })
+    .link({ todos: focusId }),
 ])
 ```
 
 Here we have:
 
-- todos, identified as `workout`, `protein`, `sleep`, `standup`, `reviewPRs`, and `focus`
-- goals, identified as `health` and `work`
-- todos `workout`, `protein`, and `sleep` are associated with goal `health`
-- todos `standup`, `reviewPRs`, and `focus` are associated with goal `work`
+- todos, with unique identifiers `workoutId`, `proteinId`, `sleepId`, `standupId`, `reviewPRsId`, and `focusId`
+- goals, with unique identifiers `healthId` and `workId`
+- todos `workoutId`, `proteinId`, and `sleepId` are associated with goal `health`
+- todos `standupId`, `reviewPRsId`, and `focusId` are associated with goal `work`
 
 ---
 
@@ -45,7 +58,7 @@ One of the simpliest queries you can write is to simply get all entities of a na
 
 ```javascript
 const query = { goals: {} }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 Inspecting `data`, we'll see:
@@ -55,11 +68,11 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "health",
+      "id": healthId,
       "title": "Get fit!"
     },
     {
-      "id": "work",
+      "id": workId,
       "title": "Get promoted!"
     }
   ]
@@ -78,7 +91,7 @@ You can fetch multiple namespaces at once:
 
 ```javascript
 const query = { goals: {}, todos: {} }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 We will now see data for both namespaces.
@@ -89,11 +102,11 @@ console.log(data)
   "goals": [...],
   "todos": [
     {
-      "id": "focus",
+      "id": focusId,
       "title": "Code a bunch"
     },
     {
-      "id": "protein",
+      "id": proteinId,
       "title": "Drink protein"
     },
     ...
@@ -124,7 +137,7 @@ const query = {
     },
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 ```javascript
@@ -132,7 +145,7 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "health",
+      "id": healthId,
       "title": "Get fit!"
     }
   ]
@@ -158,14 +171,14 @@ const query = {
     },
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 ```javascript
 console.log(data)
 {
   "goals": {
-    "id": "health",
+    "id": healthId,
     "title": "Get fit!"
   }
 }
@@ -181,7 +194,7 @@ const query = {
     todos: {},
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 `goals` would now include nested `todos`
@@ -191,12 +204,12 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "health",
+      "id": healthId,
       "title": "Get fit!",
       "todos": [...],
     },
     {
-      "id": "work",
+      "id": workId,
       "title": "Get promoted!",
       "todos": [...],
     }
@@ -240,7 +253,7 @@ const query = {
     todos: {},
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 Modern applications often need to render nested relations, `InstaQL` really starts to shine for these use cases.
@@ -262,7 +275,7 @@ const query = {
     todos: {},
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 Which returns
@@ -272,19 +285,19 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "health",
+      "id": healthId,
       "title": "Get fit!",
       "todos": [
         {
-          "id": "protein",
+          "id": proteinId,
           "title": "Drink protein"
         },
         {
-          "id": "sleep",
+          "id": sleepId,
           "title": "Go to bed early"
         },
         {
-          "id": "workout",
+          "id": workoutId,
           "title": "Go on a run"
         }
       ]
@@ -308,7 +321,7 @@ const query = {
     todos: {},
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 Returns
@@ -318,19 +331,19 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "work",
+      "id": workId,
       "title": "Get promoted!",
       "todos": [
         {
-          "id": "focus",
+          "id": focusId,
           "title": "Code a bunch"
         },
         {
-          "id": "reviewPRs",
+          "id": reviewPRsId,
           "title": "Review PRs"
         },
         {
-          "id": "standup",
+          "id": standupId,
           "title": "Do standup"
         }
       ]
@@ -353,7 +366,7 @@ const query = {
     },
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 This will return goals and filtered todos
@@ -363,17 +376,17 @@ console.log(data)
 {
   "goals": [
     {
-      "id": "health",
+      "id": healthId,
       "title": "Get fit!",
       "todos": [
         {
-          "id": "workout",
+          "id": workoutId,
           "title": "Go on a run"
         }
       ]
     },
     {
-      "id": "work",
+      "id": workId,
       "title": "Get promoted!",
       "todos": []
     }
@@ -396,17 +409,15 @@ Notice the difference between these three cases.
 
 ## Inverse Associations
 
-Earlier we showed how we can get goals and their associated todos. What if we wanted
-to grab todos and their associated goals? To grab associations in the reverse direction
-we use the `_` prefix.
+Associations are also available in the reverse order.
 
 ```javascript
 const query = {
   todos: {
-    _goals: {},
+    goals: {},
   },
 }
-const data = useQuery(query)
+const [_isLoading, _error, data] = useQuery(query)
 ```
 
 ```javascript
@@ -414,47 +425,11 @@ console.log(data)
 {
   "todos": [
     {
-      "id": "focus",
-      "title": "Code a bunch",
-      "_goals": [
-        {
-          "id": "work",
-          "title": "Get promoted!"
-        }
-      ]
-    },
-    ...,
-  ]
-}
-```
-
-## Alias Namespace
-
-You probably would prefer getting rid of the `_` in your query results when fetching inverse assocations. You can use the `is` keyword to alias namespaces.
-
-```javascript
-const query = {
-  todos: {
-    goals: {
-      $: {
-        is: '_goals',
-      },
-    },
-  },
-}
-const data = useQuery(query)
-```
-
-```javascript
-console.log(data)
-{
-  "todos": [
-    {
-      "id": "focus",
+      "id": focusId,
       "title": "Code a bunch",
       "goals": [
         {
-          "id": "work",
+          "id": workId,
           "title": "Get promoted!"
         }
       ]
@@ -464,207 +439,6 @@ console.log(data)
 }
 ```
 
-We aliased `_goals` to `goals`, but you're not restricted to dropping the `_`, we could have renamed the key to `priorities`.
+## More features to come!
 
-```javascript
-const query = {
-  todos: {
-    priorities: {
-      $: {
-        is: '_goals',
-      },
-    },
-  },
-}
-const data = useQuery(query)
-```
-
-```javascript
-console.log(data)
-{
-  "todos": [
-    {
-      "id": "focus",
-      "title": "Code a bunch",
-      "priorities": [
-        {
-          "id": "work",
-          "title": "Get promoted!"
-        }
-      ]
-    },
-    ...,
-  ]
-}
-```
-
-## Disambiguate Namespace
-
-For this section let's use some new example data.
-
-```javascript
-transact([
-  tx.users['joe'].update({ name: 'Joe' }),
-  tx.users['stopa'].update({ name: 'Stopa' }),
-  tx.posts['essay']
-    .update({ title: 'Graph Based Firebase' })
-    .link({ author: 'stopa' })
-    .link({ editor: 'joe' }),
-])
-```
-
-Here we have:
-
-- users, identified as `joe` and `stopa`
-- A post, identified as `essay` which was authored by user `stopa` and edited by user `joe`.
-
-It's straightforward to fetch authors and editors for posts.
-
-```javascript
-const query = {
-  "posts": {
-    "author": {},
-    "editor": {}
-  }
-})
-const data = useQuery(query)
-```
-
-But what if we wanted to fetch users and their associated posts? In this case we'll need to disambiguate between authored posts and edited posts. We can do so via `through` and alias via `is`.
-
-```javascript
-const query = {
-  users: {
-    authoredPosts: {
-      $: {
-        through: 'author',
-        is: '_posts',
-      },
-    },
-    editedPosts: {
-      $: {
-        through: 'editor',
-        is: '_posts',
-      },
-    },
-  },
-}
-const data = useQuery(query)
-```
-
-```javascript
-console.log(data)
-{
-  "users": [
-    {
-      "id": "joe",
-      "name": "Joe",
-      "authoredPosts": [],
-      "editedPosts": [
-        {
-          "id": "essay",
-          "title": "Graph Based Firebase"
-        }
-      ]
-    },
-    {
-      "id": "stopa",
-      "name": "Stopa",
-      "authoredPosts": [
-        {
-          "id": "essay",
-          "title": "Graph Based Firebase"
-        }
-      ],
-      "editedPosts": []
-    }
-  ]
-}
-```
-
-What would happen if you didn't disambiguate and tried using the reverse relation instead?
-
-```javascript
-const query = { users: { _posts: {} } }
-const data = useQuery(query)
-```
-
-It might not work as you expect. You'd get back the following
-
-```javascript
-console.log(data)
-{
-  "users": [
-    {
-      "id": "joe",
-      "name": "Joe",
-      "_posts": []
-    },
-    {
-      "id": "stopa",
-      "name": "Stopa",
-      "_posts": []
-    }
-  ]
-}
-```
-
-This happens because of how we created our link
-
-```javascript
-tx.posts["essay"].update({title: "Graph Based Firebase"})
-  .link({ author: "stopa" })
-  .link({ editor: "joe" }),
-```
-
-We specify that post `essay` is associated with user `stopa` **through** `author` and associated with user `joe` **through** `editor`.
-
-This makes it straightforward to go from `post` -> `author`, and `post` -> `editor`.
-
-```javascript
-const query = {
-  "posts": {
-    "author": {},
-    "editor": {}
-  }
-})
-const data = useQuery(query)
-```
-
-But the reverse direction is more tricky. To go from `user` -> `post` we need to specify a `through` key.
-
-- `user` -> `author` -> `post`
-
-```javascript
-const query = { users: { _posts: { $: { through: 'author' } } } }
-const data = useQuery(query)
-```
-
-- `user` -> `editor` -> `post`.
-
-```javascript
-const query = { users: { _posts: { $: { through: 'editor' } } } }
-const data = useQuery(query)
-```
-
-Finally, if we want to include both authored and edited posts in one query we can use `is` to alias.
-
-```javascript
-const query = {
-  users: {
-    authoredPosts: {
-      $: {
-        through: 'author',
-        is: '_posts',
-      },
-    },
-    editedPosts: {
-      $: {
-        through: 'editor',
-        is: '_posts',
-      },
-    },
-  },
-}
-const data = useQuery(query)
-```
+We're actively building more features for InstaQL. {% blank-link href="https://discord.gg/VU53p7uQcE" label="Let us know on discord" /%} if there's a missing feature you'd love for us to add!
