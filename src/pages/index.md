@@ -8,7 +8,7 @@ Instant is the Modern Firebase. With Instant you can easily build realtime and c
 
 Want to instantly play with Instant? {% sandbox-link type="counter-example" label="Check out this sandbox" /%} for a simple example.
 
-Have questions? {% blank-link href="https://discord.gg/VU53p7uQcE" label="Join us on discord!" /%}
+Have questions? {% blank-link href="https://discord.com/invite/GG44aqQGsh" label="Join us on discord!" /%}
 
 ---
 

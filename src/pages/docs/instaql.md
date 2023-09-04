@@ -415,4 +415,4 @@ console.log(data)
 
 ## More features to come!
 
-We're actively building more features for InstaQL. {% blank-link href="https://discord.gg/VU53p7uQcE" label="Let us know on discord" /%} if there's a missing feature you'd love for us to add!
+We're actively building more features for InstaQL. {% blank-link href="https://discord.com/invite/GG44aqQGsh" label="Let us know on discord" /%} if there's a missing feature you'd love for us to add!

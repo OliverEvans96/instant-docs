@@ -260,4 +260,4 @@ transact([tx.todos[workoutId].unlink({ goals: healthId })])
 
 ## More features to come!
 
-Similar to InstaQL, We're actively building more features for InstaML. {% blank-link href="https://discord.gg/VU53p7uQcE" label="We love getting requests" /%} for new features!
+Similar to InstaQL, We're actively building more features for InstaML. {% blank-link href="https://discord.com/invite/GG44aqQGsh" label="We love getting requests" /%} for new features!
