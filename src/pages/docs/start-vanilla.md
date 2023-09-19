@@ -41,6 +41,4 @@ export function useQuery(query) {
 }
 ```
 
-We love contributions so if you write your own SDK {% blank-link href="https://discord.com/invite/GG44aqQGsh" label="let us know on discord!" /%}
-
 Continue on to the [next section](/docs/init) to learn more about how to use Instant :)
