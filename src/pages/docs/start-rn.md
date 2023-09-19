@@ -5,8 +5,8 @@ title: Getting started with React Native
 You can use Instant in React Native projects too! Below is an example using Expo. Open up your terminal and do the following:
 
 ```shell
-npx create-expo-app instant-demo
-cd instant-demo
+npx create-expo-app instant-rn-demo
+cd instant-rn-demo
 yarn add @instantdb/react-native
 yarn start
 ```
