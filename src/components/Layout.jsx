@@ -15,7 +15,11 @@ const docsRepo = 'https://github.com/jsventures/instant-docs'
 const navigation = [
   {
     title: 'Introduction',
-    links: [{ title: 'Getting started', href: '/' }],
+    links: [
+      { title: 'Getting started w/ React', href: '/' },
+      { title: 'Getting started w/ React Native', href: '/docs/start-rn' },
+      { title: 'Getting started w/ Vanilla JS', href: '/docs/start-vanilla' },
+    ],
   },
   {
     title: 'Explore',
