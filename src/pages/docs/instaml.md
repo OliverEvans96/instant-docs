@@ -125,13 +125,6 @@ transact([tx.goals[eatId].update({ lastTimeEaten: 'Today' })])
 
 This will only update the value of the `lastTimeEaten` attribute for entity `eat`.
 
-{% callout %}
-In the previous example we used `eat` as the identifer for illustrating how to update
-an entity. In practice though you will likely want to generate unique and random string identifiers for your entities via the `id()` function.
-
-This is because ids must be unique across all namespaces. In a real application, ids like `eat`, `joe` or `stopa` are unlikely to be unique and may result in unexpected behavior if the same identifier appears in more than one namespace.
-{% /callout %}
-
 ### Delete
 
 The `delete` action is used for deleting entities.
