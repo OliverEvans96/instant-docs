@@ -7,7 +7,7 @@ You can use Instant with plain ol' Javascript too. You may find this helpful to 
 To use Instant in a non-react project you can install it like so
 
 ```
-yarn add @instantdb/core
+npm i @instantdb/core
 ```
 
 `@instantdb/core` exports three main functions, `init`, `subscribeQuery`, and `transact`
