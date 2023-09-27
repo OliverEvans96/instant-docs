@@ -18,7 +18,7 @@ const PACKAGE_JSON = {
     react: '18.0.0',
     'react-dom': '18.0.0',
     'react-scripts': '4.0.0',
-    '@instantdb/react': '^0.3.393',
+    '@instantdb/react': '^0.4.0',
   },
   devDependencies: {
     '@babel/runtime': '7.13.8',
