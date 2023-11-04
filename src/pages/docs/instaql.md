@@ -1,5 +1,5 @@
 ---
-title: InstaQL
+title: Reading data
 ---
 
 Instant provides a **GraphQL-like** interface for querying. We call our query language **InstaQL**
@@ -14,7 +14,7 @@ and **b) build steps** required to get up and running. To get around **a) and b)
 These next sections will use the following sample data:
 
 ```javascript
-import { id } from '@instantdb/react'
+import { id, transact, tx } from '@instantdb/react'
 
 const workoutId = id()
 const proteinId = id()

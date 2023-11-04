@@ -4,7 +4,6 @@ const gtagID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS
 
 export default function Document() {
   return (
-    // (NOTE): Forcing dark mode here, if we later want to enable switching we can
     <Html className="antialiased [font-feature-settings:'ss01']" lang="en">
       <Head>
         {/* Global Site Tag (gtag.js) - Google Analytics */}

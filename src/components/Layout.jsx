@@ -25,8 +25,8 @@ const navigation = [
     title: 'Explore',
     links: [
       { title: 'Init', href: '/docs/init' },
-      { title: 'InstaQL', href: '/docs/instaql' },
-      { title: 'InstaML', href: '/docs/instaml' },
+      { title: 'Reading data', href: '/docs/instaql' },
+      { title: 'Writing data', href: '/docs/instaml' },
     ],
   },
   {
