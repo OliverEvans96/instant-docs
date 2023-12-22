@@ -226,8 +226,7 @@ delete to only succeed on todos associated with a specific user email.
 }
 ```
 
-## More to come!
+## Get Help
 
-We heavily leverage CEL for our permission language. It's still new, and there
-may be some warts. We're happy help and provide more examples. Let us know if
-you have any questions!
+We heavily leverage CEL for our permission language. Let us know if you have any questions!
+We're happy help and provide more examples :)
