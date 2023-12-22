@@ -27,6 +27,9 @@ const navigation = [
       { title: 'Init', href: '/docs/init' },
       { title: 'Reading data', href: '/docs/instaql' },
       { title: 'Writing data', href: '/docs/instaml' },
+      { title: 'Auth', href: '/docs/auth' },
+      { title: 'Permissions', href: '/docs/permissions' },
+      { title: 'Instant on the Backend', href: '/docs/backend' },
     ],
   },
   {

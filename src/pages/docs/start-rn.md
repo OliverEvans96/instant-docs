@@ -8,8 +8,10 @@ You can use Instant in React Native projects too! Below is an example using Expo
 # Create an app with expo
 npx create-expo-app instant-rn-demo
 cd instant-rn-demo
+
 # Install instant
 npm i @instantdb/react-native
+
 # Install peer dependencies
 npm i @react-native-async-storage/async-storage @react-native-community/netinfo react-native-get-random-values
 ```
