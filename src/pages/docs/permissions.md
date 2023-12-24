@@ -44,10 +44,10 @@ In this example we explicitly set each action for `todos` to true
 ```json
 "todos": {
   "allow": {
-    "view": "true"
+    "view": "true",
     "create": "true",
     "update": "true",
-    "delete": "true",
+    "delete": "true"
   },
 ```
 
@@ -128,18 +128,15 @@ Inside each rule, you can write CEL code that evaluates to either `true` or `fal
 
 ```json
 {
-  "attrs": { create: "false" }
+  "attrs": { "create": "false" },
   "todos": {
     "allow": {
-      "view": "auth.id != null"
+      "view": "auth.id != null",
       "create": "isOwner",
       "update": "!(newData.title == data.title)",
-      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']",
+      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']"
     },
-    "bind": [
-      "isOwner",
-      "auth.id == data.creatorId"
-    ]
+    "bind": ["isOwner", "auth.id == data.creatorId"]
   }
 }
 ```
@@ -161,22 +158,19 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { create: "false" }
+  "attrs": { "create": "false" },
   "todos": {
     "allow": {
-      "create": "isOwner",
+      "create": "isOwner"
     },
-    "bind": [
-      "isOwner",
-      "auth.id == data.creatorId"
-    ]
+    "bind": ["isOwner", "auth.id == data.creatorId"]
   }
 }
 ```
 
 ```json
 {
-  "attrs": { create: "false" }
+  "attrs": { "create": "false" },
   "todos": {
     "allow": {
       "create": "auth.id == data.creatorId"
@@ -189,7 +183,7 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { create: "false" }
+  "attrs": { "create": "false" },
   "todos": {
     "allow": {
       "create": "isOwner || isAdmin"
@@ -211,10 +205,10 @@ delete to only succeed on todos associated with a specific user email.
 
 ```json
 {
-  "attrs": { create: "false" }
+  "attrs": { "create": "false" },
   "todos": {
     "allow": {
-      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']",
+      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']"
     },
     "bind": [
       "isOwner",
