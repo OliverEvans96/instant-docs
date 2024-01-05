@@ -12,6 +12,7 @@ const APP_ID = 'REPLACE ME'
 init({
   appId: APP_ID,
   websocketURI: 'wss://api.instantdb.com/runtime/session',
+  apiURI: 'https://api.instantdb.com',
 })
 
 function App() {
