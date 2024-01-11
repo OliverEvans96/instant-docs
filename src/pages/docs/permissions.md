@@ -69,8 +69,8 @@ In this example we set no rules, and thus all permission checks pass.
 
 {% callout type="warning" %}
 
-When you start developing you don't likely don't need to worry about
-permissions. However, once you start shipping your app to users you likely will
+When you start developing you probably need to worry about
+permissions. However, once you start shipping your app to users you will
 want to secure their data!
 
 {% /callout %}
