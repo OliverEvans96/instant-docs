@@ -8,8 +8,6 @@ Instant uses a **Firebase-inspired** interface for mutations. We call our mutati
 
 We love Firebase's simple mutation API and how it provides optimistic updates and rollbacks for free. We wanted to bring the same experience with support for relations.
 
-You can try out the examples below with {% sandbox-link type="goals-and-todos" label="this sandbox" /%}.
-
 ## Transact
 
 `transact` is used for committing transaction chunks. `transact` takes only one parameter, an array of `tx` transaction chunks. For example running the following
