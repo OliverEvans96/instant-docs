@@ -22,6 +22,7 @@ Now open up `src/App.js` in your favorite editor and replace the entirity of the
 import { init, useQuery, transact, tx } from '@instantdb/react-native'
 import { View, Text, Linking, Button, StyleSheet } from 'react-native'
 
+// Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
 init({

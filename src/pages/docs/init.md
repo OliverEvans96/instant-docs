@@ -7,6 +7,7 @@ The first step to using Instant in your app is to to call `init` before rending 
 ```javascript
 import { init } from '@instantdb/react'
 
+// Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
 init({

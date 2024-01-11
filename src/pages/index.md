@@ -28,6 +28,7 @@ Now open up `src/App.js` in your favorite editor and replace the entirity of the
 ```javascript
 import { init, useQuery, tx, transact } from '@instantdb/react'
 
+// Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
 init({
