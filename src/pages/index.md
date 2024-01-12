@@ -29,11 +29,7 @@ import { init, useQuery, tx, transact } from '@instantdb/react'
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({
-  appId: APP_ID,
-  websocketURI: 'wss://api.instantdb.com/runtime/session',
-  apiURI: 'https://api.instantdb.com',
-})
+init({ appId: APP_ID })
 
 const singletonId = '0c1b1794-87de-4b3c-8f11-b7b66290ffb0'
 

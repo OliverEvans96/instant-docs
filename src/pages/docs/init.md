@@ -10,11 +10,7 @@ import { init } from '@instantdb/react'
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({
-  appId: APP_ID,
-  websocketURI: 'wss://api.instantdb.com/runtime/session',
-  apiURI: 'https://api.instantdb.com',
-})
+init({ appId: APP_ID })
 
 function App() {
   return <Main />

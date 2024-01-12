@@ -25,10 +25,7 @@ import { View, Text, Linking, Button, StyleSheet } from 'react-native'
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({
-  appId: APP_ID,
-  websocketURI: 'wss://api.instantdb.com/runtime/session',
-})
+init({ appId: APP_ID })
 
 function App() {
   const { isLoading, error, data } = useQuery({ colors: {} })

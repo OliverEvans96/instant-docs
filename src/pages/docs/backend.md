@@ -14,16 +14,14 @@ tweaks.
 ### init
 
 ```javascript
-import dotenv from 'dotenv';
-import { init } from "@instantdb/admin"
-dotenv.config();
+import dotenv from 'dotenv'
+import { init } from '@instantdb/admin'
+dotenv.config()
 
 init({
-  appId: "my-instant-app-id"
-  apiURI: "https://api.instantdb.com",
-  adminToken: process.env.INSTANT_APP_ADMIN_TOKEN
-});
-
+  appId: 'my-instant-app-id',
+  adminToken: process.env.INSTANT_APP_ADMIN_TOKEN,
+})
 ```
 
 Similar to `@instantdb/react`, you must `init` before doing any queries or
