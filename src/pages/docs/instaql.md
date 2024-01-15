@@ -132,7 +132,7 @@ const query = {
   goals: {
     $: {
       where: {
-        id: 'health',
+        id: healthId,
       },
     },
   },
@@ -155,7 +155,7 @@ console.log(data)
 The SQL equivalent would be:
 
 ```javascript
-const data = { goals: doSQL("SELECT * FROM goals WHERE id = 'health'") }
+const data = { goals: doSQL("SELECT * FROM goals WHERE id = 'healthId'") }
 ```
 
 ## Fetch associations
@@ -243,7 +243,7 @@ const query = {
   goals: {
     $: {
       where: {
-        id: 'health',
+        id: healthId,
       },
     },
     todos: {},
@@ -333,9 +333,11 @@ We can also filter associated data.
 ```javascript
 const query = {
   goals: {
-    $: {
-      where: {
-        'todos.title': 'Go on a run',
+    todos: {
+      $: {
+        where: {
+          'todos.title': 'Go on a run',
+        },
       },
     },
   },
