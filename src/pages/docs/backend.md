@@ -14,9 +14,7 @@ tweaks.
 ### init
 
 ```javascript
-import dotenv from 'dotenv'
 import { init } from '@instantdb/admin'
-dotenv.config()
 
 init({
   appId: 'my-instant-app-id',
