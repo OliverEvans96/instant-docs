@@ -45,18 +45,10 @@ function App() {
   }
   const { isLoading, error, data } = useQuery(query)
   if (isLoading) {
-    return (
-      <div>
-        If you are seeing this you likely need to replace <b>APP_ID</b> on line
-        5<br />
-        <br />
-        You can get your APP_ID by{' '}
-        <a href="https://instantdb.com/dash" target="_blank" rel="noreferrer">
-          logging into your Instant dashboard
-        </a>
-        . After replacing the id you may need to reload the page.
-      </div>
-    )
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>
   }
 
   return <Counter data={data} />

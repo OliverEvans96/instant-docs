@@ -29,29 +29,20 @@ init({ appId: APP_ID })
 
 function App() {
   const { isLoading, error, data } = useQuery({ colors: {} })
-
   if (isLoading) {
     return (
-      <View style={{ padding: 10 }}>
-        <Text>
-          If you are seeing this you likely need to replace{' '}
-          <Text style={{ fontWeight: 'bold' }}>APP_ID</Text> on line 4
-        </Text>
-        <Text>{'\n'}</Text>
-        <Text>
-          You can get your APP_ID by{' '}
-          <Text
-            style={{ color: 'blue' }}
-            onPress={() => Linking.openURL('https://instantdb.com/dash')}
-          >
-            logging into your Instant dashboard
-          </Text>
-          . After replacing the id you may need to reload the page.
-        </Text>
+      <View>
+        <Text>Loading...</Text>
       </View>
     )
   }
-  if (error) return <Text>Error: {error.message}</Text>
+  if (error) {
+    return (
+      <View>
+        <Text>Error: {error.message}</Text>
+      </View>
+    )
+  }
 
   return <Main data={data} />
 }
