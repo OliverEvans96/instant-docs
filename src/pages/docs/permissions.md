@@ -8,18 +8,15 @@ Here’s an example rulset below
 
 ```json
 {
-  "attrs": { "create": "false" }
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
-      "view": "auth.id != null"
-      "create": "isOwner",
+      "view": "auth.id != null",
+      "create": "auth.id == newData.creatorId",
       "update": "isOwner",
-      "delete": "isOwner",
+      "delete": "isOwner"
     },
-    "bind": [
-      "isOwner",
-      "auth.id == data.creatorId"
-    ]
+    "bind": ["isOwner", "auth.id == data.creatorId"]
   }
 }
 ```
@@ -106,7 +103,7 @@ And we have a rules defined as
 
 ```json
 {
-  "attrs": { "create": "false" }
+  "attrs": { "allow": { "create": "false" } }
 }
 ```
 
@@ -128,13 +125,13 @@ Inside each rule, you can write CEL code that evaluates to either `true` or `fal
 
 ```json
 {
-  "attrs": { "create": "false" },
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "view": "auth.id != null",
       "create": "isOwner",
       "update": "!(newData.title == data.title)",
-      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']"
+      "delete": "'joe@instantdb.com' in data.ref('users.email')"
     },
     "bind": ["isOwner", "auth.id == data.creatorId"]
   }
@@ -158,7 +155,7 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "create": "false" },
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "isOwner"
@@ -170,7 +167,7 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "create": "false" },
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "auth.id == data.creatorId"
@@ -183,7 +180,7 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "create": "false" },
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "isOwner || isAdmin"
@@ -205,10 +202,10 @@ delete to only succeed on todos associated with a specific user email.
 
 ```json
 {
-  "attrs": { "create": "false" },
+  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
-      "delete": "data.ref('users.handle') in ['joe@instantdb.com', 'stopa@instantdb.com']"
+      "delete": "'joe@instantdb.com' in data.ref('users.email')"
     },
     "bind": [
       "isOwner",
