@@ -129,11 +129,10 @@ Inside each rule, you can write CEL code that evaluates to either `true` or `fal
   "todos": {
     "allow": {
       "view": "auth.id != null",
-      "create": "isOwner",
+      "create": "newData.creatorId == auth.id",
       "update": "!(newData.title == data.title)",
       "delete": "'joe@instantdb.com' in data.ref('users.email')"
-    },
-    "bind": ["isOwner", "auth.id == data.creatorId"]
+    }
   }
 }
 ```
