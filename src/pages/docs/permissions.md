@@ -8,7 +8,6 @@ Here’s an example rulset below
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "view": "auth.id != null",
