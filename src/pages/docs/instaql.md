@@ -11,49 +11,6 @@ and **b) build steps** required to get up and running. To get around **a) and b)
 
 ## Fetch namespace
 
-These next sections will use the following sample data:
-
-```javascript
-import { id, transact, tx } from '@instantdb/react'
-
-const workoutId = id()
-const proteinId = id()
-const sleepId = id()
-const standupId = id()
-const reviewPRsId = id()
-const focusId = id()
-const healthId = id()
-const workId = id()
-
-transact([
-  tx.todos[workoutId].update({ title: 'Go on a run' }),
-  tx.todos[proteinId].update({ title: 'Drink protein' }),
-  tx.todos[sleepId].update({ title: 'Go to bed early' }),
-  tx.todos[standupId].update({ title: 'Do standup' }),
-  tx.todos[reviewPRsId].update({ title: 'Review PRs' }),
-  tx.todos[focusId].update({ title: 'Code a bunch' }),
-  tx.goals[healthId]
-    .update({ title: 'Get fit!' })
-    .link({ todos: workoutId })
-    .link({ todos: proteinId })
-    .link({ todos: sleepId }),
-  tx.goals[workId]
-    .update({ title: 'Get promoted!' })
-    .link({ todos: standupId })
-    .link({ todos: reviewPRsId })
-    .link({ todos: focusId }),
-])
-```
-
-Here we have:
-
-- todos, with unique identifiers `workoutId`, `proteinId`, `sleepId`, `standupId`, `reviewPRsId`, and `focusId`
-- goals, with unique identifiers `healthId` and `workId`
-- todos `workoutId`, `proteinId`, and `sleepId` are associated with goal `health`
-- todos `standupId`, `reviewPRsId`, and `focusId` are associated with goal `work`
-
----
-
 One of the simpliest queries you can write is to simply get all entities of a namespace.
 
 ```javascript
