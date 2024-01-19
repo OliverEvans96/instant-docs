@@ -8,6 +8,146 @@ Instant supports a "magic-code" flow for auth. Users provide their email, we sen
 them a login code on your behalf, and they authenticate with your app. Here's
 how you can do it with react.
 
+```javascript
+import React, { useState } from 'react'
+import { auth, useAuth } from '@instantdb/react'
+
+function App() {
+  const { isLoading, user, error } = useAuth()
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Uh oh! {error.message}</div>
+  }
+  if (user) {
+    return <h1>Hello {user.email}!</h1>
+  }
+  return <Login />
+}
+
+function Login() {
+  const [sentEmail, setSentEmail] = useState('')
+  return (
+    <div style={containerStyle}>
+      {!sentEmail ? (
+        <Email setSentEmail={setSentEmail} />
+      ) : (
+        <MagicCode sentEmail={sentEmail} />
+      )}
+    </div>
+  )
+}
+
+function Email({ setSentEmail }) {
+  const [email, setEmail] = useState('')
+  return (
+    <div style={formStyle}>
+      <h2 style={{ color: '#333', marginBottom: '20px' }}>Let's log you in!</h2>
+      <div>
+        <input
+          style={inputStyle}
+          placeholder="Enter your email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div>
+        <button
+          style={buttonStyle}
+          onClick={() => {
+            if (!email) return
+            setSentEmail(email)
+            auth.sendMagicCode({ email }).catch((err) => {
+              alert('Uh oh :' + err.body?.message)
+              setSentEmail('')
+            })
+          }}
+        >
+          Send Code
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function MagicCode({ sentEmail }) {
+  const [code, setCode] = useState('')
+  return (
+    <div style={formStyle}>
+      <h2 style={{ color: '#333', marginBottom: '20px' }}>
+        Okay we sent you an email! What was the code?
+      </h2>
+      <div>
+        <input
+          style={inputStyle}
+          type="text"
+          placeholder="Code plz"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+      </div>
+      <button
+        style={buttonStyle}
+        onClick={() => {
+          auth.verifyMagicCode({ email: sentEmail, code }).catch((err) => {
+            alert('Uh oh :' + err.body?.message)
+            setCode('')
+          })
+        }}
+      >
+        Verify
+      </button>
+    </div>
+  )
+}
+
+const containerStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+}
+
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100vh',
+  fontFamily: 'Arial, sans-serif',
+}
+
+const inputStyle = {
+  padding: '10px',
+  marginBottom: '15px',
+  border: '1px solid #ddd',
+  borderRadius: '5px',
+  width: '300px',
+}
+
+const buttonStyle = {
+  padding: '10px 20px',
+  backgroundColor: '#007bff',
+  color: 'white',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+}
+```
+
+This creates a `Login` component to handle our auth flow. Of note is `auth.sendMagicCode`
+and `auth.verifyMagicCode`.
+
+On successful validation, Instant's backend will return a user object with a refresh token.
+The client SDK will then restart the websocket connection with Instant's sync layer and provide the refresh token.
+
+When doing `useQuery` or `transact`, the refresh token will be used to hydrate `auth`
+on the backend during permission checks.
+
+On the client, `useAuth` will set `isLoading` to `false` and populate `user` -- huzzah!
+
 ### useAuth
 
 ```javascript
@@ -59,151 +199,6 @@ auth.signOut()
 ```
 
 Use `auth.signOut` to sign out users. This will restart the websocket connection and clear out the current user refresh token.
-
-### Putting it all together
-
-```javascript
-import React, { useState } from 'react'
-import { auth } from '@instantdb/react'
-
-function Login() {
-  const [state, setState] = useState({
-    sentEmail: '',
-    email: '',
-    code: '',
-  })
-  const { sentEmail, email, code } = state
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}
-    >
-      <div>
-        {!sentEmail ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100vh',
-              fontFamily: 'Arial, sans-serif',
-            }}
-          >
-            <h2 style={{ color: '#333', marginBottom: '20px' }}>
-              Let's log you in!
-            </h2>
-            <div>
-              <input
-                style={{
-                  padding: '10px',
-                  marginBottom: '15px',
-                  border: '1px solid #ddd',
-                  borderRadius: '5px',
-                  width: '300px',
-                }}
-                placeholder="Enter your email"
-                type="email"
-                value={email}
-                onChange={(e) => setState({ ...state, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <button
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: '#007bff',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  if (!email) return
-                  setState({ ...state, sentEmail: email })
-                  auth.sendMagicCode({ email }).catch((err) => {
-                    alert('Uh oh :' + err.body?.message)
-                    setState({ ...state, sentEmail: '' })
-                  })
-                }}
-              >
-                Send Code
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100vh',
-              fontFamily: 'Arial, sans-serif',
-            }}
-          >
-            <h2 style={{ color: '#333', marginBottom: '20px' }}>
-              Okay we sent you an email! What was the code?
-            </h2>
-            <div>
-              <input
-                style={{
-                  padding: '10px',
-                  marginBottom: '15px',
-                  border: '1px solid #ddd',
-                  borderRadius: '5px',
-                  width: '300px',
-                }}
-                type="text"
-                placeholder="Code plz"
-                value={code || ''}
-                onChange={(e) => setState({ ...state, code: e.target.value })}
-              />
-            </div>
-            <button
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-              onClick={(e) => {
-                auth
-                  .verifyMagicCode({ email: sentEmail, code })
-                  .catch((err) => {
-                    alert('Uh oh :' + err.body?.message)
-                    setState({ ...state, code: '' })
-                  })
-              }}
-            >
-              Verify
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-export default Login
-```
-
-Here we create a `Login` component to handle our auth flow. Of note is `auth.sendMagicCode`
-and `auth.verifyMagicCode`.
-
-On successful validation, Instant's backend will return a user object with a refresh token.
-The client SDK will then restart the websocket connection with Instant's sync layer and provide the refresh token.
-
-When doing `useQuery` or `transact`, the refresh token will be used to hydrate `auth`
-on the backend during permission checks.
-
-On the client, `useAuth` will set `isLoading` to `false` and populate `user` -- huzzah!
 
 ## More auth methods coming
 
