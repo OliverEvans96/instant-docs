@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 export function Fence({ children, language, showCopy }) {
   const [copyLabel, setCopyLabel] = useState('Copy')
-  console.log("showCopy", showCopy);
   return (
     <Highlight
       {...defaultProps}
@@ -18,14 +17,14 @@ export function Fence({ children, language, showCopy }) {
       {({ className, style, tokens, getTokenProps }) => (
         <div>
           {showCopy &&
-            <div className="flex justify-end">
+            <div className="flex justify-end -mb-2">
               <CopyToClipboard text={children}>
                 <button
                   onClick={() => {
                     setCopyLabel('Copied!')
                     setTimeout(() => {
                       setCopyLabel('Copy')
-                    }, 2000)
+                    }, 2500)
                   }}
                   className="flex items-center gap-x-1
             rounded-md bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
