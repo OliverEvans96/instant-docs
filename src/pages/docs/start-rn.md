@@ -18,7 +18,7 @@ npm i @react-native-async-storage/async-storage @react-native-community/netinfo 
 
 Now open up `src/App.js` in your favorite editor and replace the entirity of the file with the following code.
 
-```javascript
+```javascript {% showCopy=true %}
 import { init, useQuery, transact, tx } from '@instantdb/react-native'
 import { View, Text, Linking, Button, StyleSheet } from 'react-native'
 

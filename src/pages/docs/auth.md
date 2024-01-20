@@ -8,7 +8,7 @@ Instant supports a "magic-code" flow for auth. Users provide their email, we sen
 them a login code on your behalf, and they authenticate with your app. Here's
 how you can do it with react.
 
-```javascript
+```javascript {% showCopy=true %}
 import React, { useState } from 'react'
 import { auth, useAuth } from '@instantdb/react'
 

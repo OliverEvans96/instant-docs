@@ -6,7 +6,7 @@ To secure user data, you can use Instant’s Rule Language. Our rule language
 takes inspiration from Rails’ Activerecord, Google’s CEL, and JSON.
 Here’s an example rulset below
 
-```json
+```json {% showCopy=true %}
 {
   "todos": {
     "allow": {
