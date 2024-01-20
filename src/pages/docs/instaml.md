@@ -4,70 +4,7 @@ title: Writing data
 
 Instant uses a **Firebase-inspired** interface for mutations. We call our mutation language **InstaML**
 
-## Why InstaML
-
-We love Firebase's simple mutation API and how it provides optimistic updates and rollbacks for free. We wanted to bring the same experience with support for relations.
-
-## Transact
-
-`transact` is used for committing transaction chunks. `transact` takes only one parameter, an array of `tx` transaction chunks. For example running the following
-
-```javascript
-import { id, transact, tx } from '@instantdb/react'
-
-const workoutId = id()
-const proteinId = id()
-const sleepId = id()
-const standupId = id()
-const reviewPRsId = id()
-const focusId = id()
-const healthId = id()
-const workId = id()
-
-transact([
-  tx.todos[workoutId].update({ title: 'Go on a run' }),
-  tx.todos[proteinId].update({ title: 'Drink protein' }),
-  tx.todos[sleepId].update({ title: 'Go to bed early' }),
-  tx.todos[standupId].update({ title: 'Do standup' }),
-  tx.todos[reviewPRsId].update({ title: 'Review PRs' }),
-  tx.todos[focusId].update({ title: 'Code a bunch' }),
-  tx.goals[healthId]
-    .update({ title: 'Get fit!' })
-    .link({ todos: workoutId })
-    .link({ todos: proteinId })
-    .link({ todos: sleepId }),
-  tx.goals[workId]
-    .update({ title: 'Get promoted!' })
-    .link({ todos: standupId })
-    .link({ todos: reviewPRsId })
-    .link({ todos: focusId }),
-])
-```
-
-Will generate:
-
-- todos, with unique identifiers `workoutId`, `proteinId`, `sleepId`, `standupId`, `reviewPRsId`, and `focusId`
-- goals, with unique identifiers `healthId` and `workId`
-- todos `workoutId`, `proteinId`, and `sleepId` are associated with goal `health`
-- todos `standupId`, `reviewPRsId`, and `focusId` are associated with goal `work`
-
-## tx
-
-`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `transact`. It follows the format
-
-```
-tx.NAMESPACE_LABEL[GLOBAL_UNIQUE_IDENTIFER].ACTION(ACTION_SPECIFIC_DATA)
-```
-
-- `NAMESPACE_LABEL` refers to the namespace to commit (e.g. `goals`, `todos`)
-- `GLOBAL_UNIQUE_IDENTIFER` is the id to look up in the namespace. This id must be unique across **all namespaces**. Suppose we have a namespace `authors`, and `editors`. If we have id `joe` in `authors`, we cannot have id `joe` in `editors` as well.
-- `ACTION` is one of `update`, `delete`, `link`, `unlink`
-- `ACTION_SPECIFIC_DATA` depends on the action
-  - `update` takes in an object of information to commit
-  - `delete` is the only aciton that doesn't take in any data,
-  - `link` and `unlink` takes an object of label-entity pairs to create/delete associations
-
-### Update
+## Update
 
 We use the `update` action to create entities.
 
@@ -123,7 +60,7 @@ transact([tx.goals[eatId].update({ lastTimeEaten: 'Today' })])
 
 This will only update the value of the `lastTimeEaten` attribute for entity `eat`.
 
-### Delete
+## Delete
 
 The `delete` action is used for deleting entities.
 
@@ -144,7 +81,7 @@ transact(goals.map(g => tx.goals[g.id].delete()));
 
 Calling `delete` on an entity also deletes its associations. So no need to worry about cleaning up previously created links.
 
-### Link
+## Link
 
 `link` is used to create associations.
 
@@ -209,7 +146,7 @@ const { isLoading, error, data } = useQuery({
 const { goals, todos } = data
 ```
 
-### Unlink
+## Unlink
 
 Links can be removed via `unlink`
 
@@ -248,6 +185,22 @@ And so does this!
 ```javascript
 transact([tx.todos[workoutId].unlink({ goals: healthId })])
 ```
+
+## tx
+
+`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `transact`. It follows the format
+
+```
+tx.NAMESPACE_LABEL[GLOBAL_UNIQUE_IDENTIFER].ACTION(ACTION_SPECIFIC_DATA)
+```
+
+- `NAMESPACE_LABEL` refers to the namespace to commit (e.g. `goals`, `todos`)
+- `GLOBAL_UNIQUE_IDENTIFER` is the id to look up in the namespace. This id must be unique across **all namespaces**. Suppose we have a namespace `authors`, and `editors`. If we have id `joe` in `authors`, we cannot have id `joe` in `editors` as well.
+- `ACTION` is one of `update`, `delete`, `link`, `unlink`
+- `ACTION_SPECIFIC_DATA` depends on the action
+  - `update` takes in an object of information to commit
+  - `delete` is the only aciton that doesn't take in any data,
+  - `link` and `unlink` takes an object of label-entity pairs to create/delete associations
 
 ## More features to come!
 

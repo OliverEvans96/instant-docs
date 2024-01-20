@@ -183,11 +183,10 @@ Use `auth.sendMagicCode` to create a magic code on instant's backend and email a
 ### auth.verifyMagicCode
 
 ```javascript
-.verifyMagicCode({ email: sentEmail, code })
-.catch((err) => {
-  alert("Uh oh :" + err.body?.message);
-  setState({ ...state, code: "" });
-});
+auth.verifyMagicCode({ email: sentEmail, code }).catch((err) => {
+  alert('Uh oh :' + err.body?.message)
+  setState({ ...state, code: '' })
+})
 ```
 
 Use `auth.verifyMagicCode` to validate codes with instant's backend.

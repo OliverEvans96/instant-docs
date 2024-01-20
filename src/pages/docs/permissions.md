@@ -65,7 +65,7 @@ In this example we set no rules, and thus all permission checks pass.
 
 {% callout type="warning" %}
 
-When you start developing you probably need to worry about
+When you start developing you probably won't worry about
 permissions. However, once you start shipping your app to users you will
 want to secure their data!
 
@@ -124,7 +124,6 @@ Inside each rule, you can write CEL code that evaluates to either `true` or `fal
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "view": "auth.id != null",
@@ -153,7 +152,6 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "isOwner"
@@ -165,7 +163,6 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "auth.id == data.creatorId"
@@ -178,7 +175,6 @@ used for `create` and `update` rules.
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "create": "isOwner || isAdmin"
@@ -200,7 +196,6 @@ delete to only succeed on todos associated with a specific user email.
 
 ```json
 {
-  "attrs": { "allow": { "create": "false" } },
   "todos": {
     "allow": {
       "delete": "'joe@instantdb.com' in data.ref('users.email')"
