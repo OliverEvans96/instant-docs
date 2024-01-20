@@ -19,6 +19,9 @@ const nodes = {
       language: {
         type: String,
       },
+      showCopy: {
+        type: Boolean,
+      },
     },
   },
 }
