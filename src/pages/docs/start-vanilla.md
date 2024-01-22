@@ -6,39 +6,53 @@ You can use Instant with plain ol' Javascript too. You may find this helpful to 
 
 To use Instant in a non-react project you can install it like so
 
-```
+```bash
 npm i @instantdb/core
 ```
 
-`@instantdb/core` exports three main functions, `init`, `subscribeQuery`, and `transact`
+Now you can import the main functions:
 
 ```javascript
-import { init, subscribeQuery, transact } from '@instantdb/core'
+import { init, getDB, subscribeQuery, transact, tx } from '@instantdb/core'
 ```
 
-`init` and `transact` work the same as `@instantdb/react`. To use `subscribeQuery` you may need to write additional logic
-to integrate with your framework of choice.
+## init
 
-For example, if we wanted to write our own `useQuery` hook using the `@instantdb/core` we could do it like so:
+`init` works the same as in `@instantdb/react`:
 
 ```javascript
-import { getDB, weakHash } from '@instantdb/core'
+const APP_ID = 'REPLACE ME'
 
-import { useEffect, useState } from 'react'
-
-export function useQuery(query) {
-  const db = getDB()
-  const [state, setState] = useState({ isLoading: true })
-  useEffect(() => {
-    setState({ isLoading: true })
-    const unsub = db.subscribeQuery(query, (resp) => {
-      setState({ isLoading: false, ...resp })
-    })
-    return unsub
-  }, [weakHash(query)])
-
-  return state
-}
+init({ appId: APP_ID })
 ```
 
-Continue on to the [next section](/docs/init) to learn more about how to use Instant :)
+## Writing Data
+
+`transact` works the same too:
+
+```javascript
+transact([tx.goals[id()].update({ title: 'eat' })])
+```
+
+To learn more writing transactions, check out the [**Writing Data**](/docs/instaml) section.
+
+## Reading Data
+
+Now that you have your database up and running, you can subscribe to queries:
+
+```javascript
+const query = { goals: {} }
+// get the database you inited
+const db = getDB()
+// subscribe a query
+const unsub = db.subscribeQuery(query, (resp) => {
+  if (resp.error) {
+    console.error('Uh oh!', resp.error.message)
+  }
+  if (resp.data) {
+    console.log('Data!', resp.data)
+  }
+})
+```
+
+Continue on to the [Explore section](/docs/init) to learn more about how to use Instant :)
