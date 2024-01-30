@@ -15,15 +15,17 @@ Have questions? {% blank-link href="https://discord.com/invite/GG44aqQGsh" label
 To use Instant in a brand new project fire up your terminal and do the following:
 
 ```shell {% showCopy=true %}
-npx create-react-app instant-demo
+npx create-next-app -e hello-world instant-demo
 cd instant-demo
 npm i @instantdb/react
-npm start
+npm run dev
 ```
 
-Now open up `src/App.js` in your favorite editor and replace the entirity of the file with the following code.
+Now open up `app/page.tsx` in your favorite editor and replace the entirity of the file with the following code.
 
 ```javascript {% showCopy=true %}
+'use client'
+
 import { init, useQuery, tx, transact } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
