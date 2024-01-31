@@ -64,6 +64,71 @@ console.log("New log entry made for" today, "with tx-id", res["tx-id"])
 `transact` is an async function that behaviors nearly identical to `transact`
 from @`instantdb/react`. It returns a `tx-id` on success.
 
+## Custom Auth
+
+You can also use the Admin SDK to roll your own custom auth flows.
+
+### auth.createToken
+
+Once you know you want to sign up a user, you can create a token for them.
+
+Here's how it could look on the backend:
+
+```javascript
+import { auth } from '@instantdb/admin'
+
+app.post('/signin', async (req, res) => {
+  // your custom flow for users
+  return res.status(200).send({ token: await auth.createToken(email) })
+})
+
+const token = await auth.createToken('stepan.p@gmail.com')
+```
+
+If a user with this email exists, you'll get a token them. If a user does not exist, we'll create them for you.
+
+Once you have a token, you can use it in your frontend.
+
+```javascript
+import {auth} from '@instantdb/react'
+
+// your frontend code
+async function handleSignIn() {
+  // get the token from your backend
+  const token = await fetch('/signin', ...);
+  // sign the user in through Instant
+  auth.signInWithToken(token);
+}
+
+```
+
+### auth.verifyToken
+
+You can also accept tokens from the frontend. For example, say you want to make a special endpoint, and want to authenticate your users.
+
+From the frontend, you can send the current token:
+
+```javascript
+import { useAuth } from '@instantdb/react'
+
+function App() {
+  const { user } = useAuth();
+  // ...
+  function onClick() {
+    yourBackend.apiCall(user.refresh_token, ...);
+  }
+}
+```
+
+And in your endpoint, you can verify it:
+
+```javascript
+app.post('/verify', async (req, res) => {
+  // verify the token this user passed in
+  const user = await auth.verifyToken(req.headers['token'])
+})
+```
+
 ## More SDKs to come
 
 In the future we will expose an HTTP API so you can use Instant with your

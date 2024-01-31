@@ -199,6 +199,10 @@ auth.signOut()
 
 Use `auth.signOut` to sign out users. This will restart the websocket connection and clear out the current user refresh token.
 
-## More auth methods coming
+## Custom Auth
+
+Want to do something more custom? You can roll your own authentication flows using the [Admin SDK](/docs/backend)!
+
+### More methods coming
 
 In the future we will provide more mechanisms for auth. If you have any requests, we're all ears!
