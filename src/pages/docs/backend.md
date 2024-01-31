@@ -62,17 +62,15 @@ console.log("New log entry made for" today, "with tx-id", res["tx-id"])
 ```
 
 `transact` is an async function that behaviors nearly identical to `transact`
-from @`instantdb/react`. It returns a `tx-id` on success.
+from `@instantdb/react`. It returns a `tx-id` on success.
 
 ## Custom Auth
 
-You can also use the Admin SDK to roll your own custom auth flows.
+Instant supports magic codes out of the box, but what if you want to implement a different, custom flow? You can do that with the admin SDK.
 
 ### auth.createToken
 
-Once you know you want to sign up a user, you can create a token for them.
-
-Here's how it could look on the backend:
+The main function you'll want to use is `auth.createToken`. This lets you create a unique token that can sign users in.
 
 ```javascript
 import { auth } from '@instantdb/admin'
