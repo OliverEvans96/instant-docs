@@ -79,7 +79,7 @@ function Header({ navigation }) {
         <MobileNavigation navigation={navigation} />
       </div>
       <div className="relative flex flex-grow basis-0 items-center">
-        <Link href="https://instantdb.com" aria-label="Home page">
+        <Link href="https://instantdb.com" aria-label="Home page" className='leading-none'>
           <Logo className="hidden h-9 w-auto fill-slate-700 dark:fill-sky-100 lg:block" />
         </Link>
       </div>

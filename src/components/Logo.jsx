@@ -11,12 +11,9 @@ export function Logo() {
     <span className="inline-flex space-x-2">
       <LogoImage />
       <div>
-          <span className="font-mono text-lg font-bold lowercase dark:text-white">
+        <span className="font-mono text-lg font-bold lowercase dark:text-white">
           Instant
         </span>
-          <div className="font-mono text-xs uppercase dark:text-gray-400">
-          Hacker Preview
-        </div>
       </div>
     </span>
   );
