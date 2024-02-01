@@ -91,7 +91,7 @@ function MagicCode({ sentEmail }) {
       <button
         style={buttonStyle}
         onClick={() => {
-          auth.verifyMagicCode({ email: sentEmail, code }).catch((err) => {
+          auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
             alert('Uh oh :' + err.body?.message)
             setCode('')
           })
@@ -138,7 +138,7 @@ const buttonStyle = {
 ```
 
 This creates a `Login` component to handle our auth flow. Of note is `auth.sendMagicCode`
-and `auth.verifyMagicCode`.
+and `auth.signInWithMagicCode`.
 
 On successful validation, Instant's backend will return a user object with a refresh token.
 The client SDK will then restart the websocket connection with Instant's sync layer and provide the refresh token.
@@ -180,16 +180,16 @@ auth.sendMagicCode({ email }).catch((err) => {
 
 Use `auth.sendMagicCode` to create a magic code on instant's backend and email a login code
 
-### auth.verifyMagicCode
+### auth.signInWithMagicCode
 
 ```javascript
-auth.verifyMagicCode({ email: sentEmail, code }).catch((err) => {
+auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
   alert('Uh oh :' + err.body?.message)
   setState({ ...state, code: '' })
 })
 ```
 
-Use `auth.verifyMagicCode` to validate codes with instant's backend.
+Use `auth.signInWithMagicCode` to validate codes with instant's backend.
 
 ### auth.signOut
 
@@ -199,6 +199,10 @@ auth.signOut()
 
 Use `auth.signOut` to sign out users. This will restart the websocket connection and clear out the current user refresh token.
 
-## More auth methods coming
+## Custom Auth
+
+Want to do something more custom? You can roll your own authentication flows using the [Admin SDK](/docs/backend#custom-auth)!
+
+### More methods coming
 
 In the future we will provide more mechanisms for auth. If you have any requests, we're all ears!
