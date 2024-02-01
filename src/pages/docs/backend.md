@@ -35,9 +35,9 @@ if it accidently leaks.
 
 {% /callout %}
 
-## Changing Data
+## Reading and Writing Data
 
-`query` and `transact` let you manipulate data as an admin.
+`query` and `transact` let you read and write data as an admin.
 
 ### query
 
@@ -70,7 +70,7 @@ from `@instantdb/react`. It returns a `tx-id` on success.
 
 ## Custom Auth
 
-You can use the Admin SDK to create your authentication flows. You'd typically make a change on the backend, a change on the frontend:
+You can use the Admin SDK to create your own authentication flows. You'd typically make a change on both your backend and frontend:
 
 ### Backend: auth.createToken
 
@@ -88,7 +88,7 @@ app.post('/custom_sign_in', async (req, res) => {
 })
 ```
 
-If a user with this email does not exist, `auth.createToken` will create them for you.
+If a user with this email does not exist, `auth.createToken` will create a user for you.
 
 {% callout type="note" %}
 
