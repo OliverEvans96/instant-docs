@@ -3,4 +3,4 @@ MAKE = make $(MAKEFLAGS)
 
 dev:
 	@echo "Booting up dev..."
-	npm run dev
+	PORT=3010 npm run dev

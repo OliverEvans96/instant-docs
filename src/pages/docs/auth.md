@@ -201,7 +201,7 @@ Use `auth.signOut` to sign out users. This will restart the websocket connection
 
 ## Custom Auth
 
-Want to do something more custom? You can roll your own authentication flows using the [Admin SDK](/docs/backend)!
+Want to do something more custom? You can roll your own authentication flows using the [Admin SDK](/docs/backend#custom-auth)!
 
 ### More methods coming
 
