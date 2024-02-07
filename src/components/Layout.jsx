@@ -30,6 +30,7 @@ const navigation = [
       { title: 'Auth', href: '/docs/auth' },
       { title: 'Permissions', href: '/docs/permissions' },
       { title: 'Instant on the Backend', href: '/docs/backend' },
+      { title: 'Debug mode', href: '/docs/debug-mode' },
     ],
   },
   {
