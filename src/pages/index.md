@@ -34,11 +34,44 @@ const APP_ID = 'REPLACE ME'
 
 init({ appId: APP_ID })
 
-// Mutations
+function App() {
+  // Read Data
+  const { isLoading, error, data } = useQuery({ todos: {} })
+
+  const [filter, setFilter] = useState('all')
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
+  const visibleTodos = data.todos
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    .filter((todo) => {
+      if (filter === 'all') return true
+      return filter === 'remaining' ? !todo.done : todo.done
+    })
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.header}>todos</div>
+      <TodoForm todos={data.todos} />
+      <TodoList todos={visibleTodos} />
+      <ActionBar todos={data.todos} setFilter={setFilter} />
+    </div>
+  )
+}
+
+// Write Data
 // ---------
-function addTodo(todo) {
+function addTodo(text) {
   transact(
-    tx.todos[id()].update({ text: todo, done: false, createdAt: new Date() })
+    tx.todos[id()].update({
+      text,
+      done: false,
+      createdAt: new Date(),
+    })
   )
 }
 
@@ -51,17 +84,14 @@ function toggleDone(todo) {
 }
 
 function deleteCompleted(todos) {
-  transact(
-    todos.filter((todo) => todo.done).map((todo) => tx.todos[todo.id].delete())
-  )
+  const completed = todos.filter((todo) => todo.done)
+  const txs = completed.map((todo) => tx.todos[todo.id].delete())
+  transact(txs)
 }
 
 function toggleAll(todos) {
-  if (todos.every((todo) => todo.done)) {
-    transact(todos.map((todo) => tx.todos[todo.id].update({ done: false })))
-    return
-  }
-  transact(todos.map((todo) => tx.todos[todo.id].update({ done: true })))
+  const newVal = !todos.every((todo) => todo.done)
+  transact(todos.map((todo) => tx.todos[todo.id].update({ done: newVal })))
 }
 
 // Components
@@ -125,47 +155,28 @@ function ActionBar({ setFilter, todos }) {
     <div style={styles.actionBar}>
       <div># Remain: {todos.filter((todo) => !todo.done).length}</div>
       <div>
-        <span style={{ marginRight: '5px' }} onClick={() => setFilter('all')}>
+        <span
+          style={{ marginRight: '5px', cursor: 'pointer' }}
+          onClick={() => setFilter('all')}
+        >
           All
         </span>
         <span
-          style={{ marginRight: '5px' }}
+          style={{ marginRight: '5px', cursor: 'pointer' }}
           onClick={() => setFilter('remaining')}
         >
           Remaining
         </span>
-        <span onClick={() => setFilter('completed')}>Completed</span>
+        <span
+          style={{ cursor: 'pointer' }}
+          onClick={() => setFilter('completed')}
+        >
+          Completed
+        </span>
       </div>
-      <div onClick={() => deleteCompleted(todos)}>Clear Completed</div>
-    </div>
-  )
-}
-
-// App
-// ----------
-function App() {
-  const { isLoading, error, data } = useQuery({ todos: {} })
-  const [filter, setFilter] = useState('all')
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>
-  }
-
-  const renderedTodos = data.todos
-    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-    .filter((todo) => {
-      if (filter === 'all') return true
-      return filter === 'remaining' ? !todo.done : todo.done
-    })
-  return (
-    <div style={styles.container}>
-      <div style={styles.header}>todos</div>
-      <TodoForm todos={data.todos} />
-      <TodoList todos={renderedTodos} />
-      <ActionBar setFilter={setFilter} todos={data.todos} />
+      <div style={{ cursor: 'pointer' }} onClick={() => deleteCompleted(todos)}>
+        Clear Completed
+      </div>
     </div>
   )
 }
@@ -208,7 +219,7 @@ const styles = {
   input: {
     backgroundColor: 'transparent',
     fontFamily: 'code, monospace',
-    width: '290px',
+    width: '289px',
     padding: '10px',
     fontStyle: 'italic',
   },
