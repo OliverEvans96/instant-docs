@@ -109,7 +109,7 @@ transact([
 ])
 ```
 
-You can specify multiple ids in one `link` too:
+You can specify multiple ids in one `link` as well:
 
 ```javascript
 transact([
@@ -157,7 +157,7 @@ This removes both:
 - The forward link from entity `health` to entity `workout`
 - The reverse link from entity `workout` to entity `health`
 
-We can `unlink` multiple ids as well:
+We can `unlink` multiple ids too:
 
 ```javascript
 transact([
