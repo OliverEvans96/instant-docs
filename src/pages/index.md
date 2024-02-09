@@ -59,6 +59,9 @@ function App() {
       <TodoForm todos={data.todos} />
       <TodoList todos={visibleTodos} />
       <ActionBar todos={data.todos} setVisible={setVisible} />
+      <div style={styles.footer}>
+        Open another tab to see todos update in realtime!
+      </div>
     </div>
   )
 }
@@ -212,14 +215,14 @@ const styles = {
     fontSize: '30px',
     cursor: 'pointer',
     marginLeft: '11px',
-    marginTop: '-5px',
+    marginTop: '-6px',
     width: '15px',
-    marginRight: '10px',
+    marginRight: '12px',
   },
   input: {
     backgroundColor: 'transparent',
     fontFamily: 'code, monospace',
-    width: '289px',
+    width: '287px',
     padding: '10px',
     fontStyle: 'italic',
   },
@@ -255,6 +258,10 @@ const styles = {
     width: '328px',
     padding: '10px',
     border: '1px solid lightgray',
+    fontSize: '10px',
+  },
+  footer: {
+    marginTop: '20px',
     fontSize: '10px',
   },
 }
