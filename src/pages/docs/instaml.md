@@ -187,7 +187,7 @@ tx.NAMESPACE_LABEL[GLOBAL_UNIQUE_IDENTIFER].ACTION(ACTION_SPECIFIC_DATA)
 ```
 
 - `NAMESPACE_LABEL` refers to the namespace to commit (e.g. `goals`, `todos`)
-- `GLOBAL_UNIQUE_IDENTIFER` is the id to look up in the namespace. This id must be unique across **all namespaces**. Suppose we have a namespace `authors`, and `editors`. If we have id `joe` in `authors`, we cannot have id `joe` in `editors` as well.
+- `GLOBAL_UNIQUE_IDENTIFER` is the id to look up in the namespace. This id must be a uuid and unique across **all namespaces**. You can use the `id()` function to generate a uuid for convenience.
 - `ACTION` is one of `update`, `delete`, `link`, `unlink`
 - `ACTION_SPECIFIC_DATA` depends on the action
   - `update` takes in an object of information to commit
