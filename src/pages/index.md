@@ -35,22 +35,22 @@ const APP_ID = 'REPLACE ME'
 init({ appId: APP_ID })
 
 function App() {
+  const [visible, setVisible] = useState('all')
+
   // Read Data
   const { isLoading, error, data } = useQuery({ todos: {} })
-
-  const [filter, setFilter] = useState('all')
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Fetching data...</div>
   }
   if (error) {
-    return <div>Error: {error.message}</div>
+    return <div>Error fetching data: {error.message}</div>
   }
 
   const visibleTodos = data.todos
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
     .filter((todo) => {
-      if (filter === 'all') return true
-      return filter === 'remaining' ? !todo.done : todo.done
+      if (visible === 'all') return true
+      return visible === 'remaining' ? !todo.done : todo.done
     })
 
   return (
@@ -58,7 +58,7 @@ function App() {
       <div style={styles.header}>todos</div>
       <TodoForm todos={data.todos} />
       <TodoList todos={visibleTodos} />
-      <ActionBar todos={data.todos} setFilter={setFilter} />
+      <ActionBar todos={data.todos} setVisible={setVisible} />
     </div>
   )
 }
@@ -150,26 +150,26 @@ function TodoList({ todos }) {
   )
 }
 
-function ActionBar({ setFilter, todos }) {
+function ActionBar({ setVisible, todos }) {
   return (
     <div style={styles.actionBar}>
       <div># Remain: {todos.filter((todo) => !todo.done).length}</div>
       <div>
         <span
           style={{ marginRight: '5px', cursor: 'pointer' }}
-          onClick={() => setFilter('all')}
+          onClick={() => setVisible('all')}
         >
           All
         </span>
         <span
           style={{ marginRight: '5px', cursor: 'pointer' }}
-          onClick={() => setFilter('remaining')}
+          onClick={() => setVisible('remaining')}
         >
           Remaining
         </span>
         <span
           style={{ cursor: 'pointer' }}
-          onClick={() => setFilter('completed')}
+          onClick={() => setVisible('completed')}
         >
           Completed
         </span>
