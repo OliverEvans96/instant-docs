@@ -109,7 +109,7 @@ transact([
 ])
 ```
 
-You can chain multiple `link`s in one `tx` too.
+You can specify multiple ids in one `link` too:
 
 ```javascript
 transact([
@@ -118,9 +118,7 @@ transact([
   tx.todos[sleepId].update({ title: 'Go to bed early' }),
   tx.goals[healthId]
     .update({ title: 'Get fit!' })
-    .link({ todos: workoutId })
-    .link({ todos: proteinId })
-    .link({ todos: sleepId }),
+    .link({ todos: [workoutId, proteinId, sleepId] }),
 ])
 ```
 
@@ -159,18 +157,12 @@ This removes both:
 - The forward link from entity `health` to entity `workout`
 - The reverse link from entity `workout` to entity `health`
 
-Similar to other actions, we can chain multiple `unlink` on a `tx`.
+We can `unlink` multiple ids as well:
 
 ```javascript
 transact([
-  tx.goals[healthId]
-    .unlink({ todos: workoutId })
-    .unlink({ todos: proteinId })
-    .unlink({ todos: sleepId }),
-  tx.goals[workId]
-    .unlink({ todos: standupId })
-    .unlink({ todos: reviewPRsId })
-    .unlink({ todos: focusId }),
+  tx.goals[healthId].unlink({ todos: [workoutId, proteinId, sleepId] }),
+  tx.goals[workId].unlink({ todos: [standupId, reviewPRsId, focusId] }),
 ])
 ```
 
