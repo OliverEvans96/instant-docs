@@ -29,7 +29,7 @@ function App() {
 function Login() {
   const [sentEmail, setSentEmail] = useState('')
   return (
-    <div style={containerStyle}>
+    <div style={authStyles.container}>
       {!sentEmail ? (
         <Email setSentEmail={setSentEmail} />
       ) : (
@@ -42,11 +42,11 @@ function Login() {
 function Email({ setSentEmail }) {
   const [email, setEmail] = useState('')
   return (
-    <div style={formStyle}>
+    <div style={authStyles.form}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>Let's log you in!</h2>
       <div>
         <input
-          style={inputStyle}
+          style={authStyles.input}
           placeholder="Enter your email"
           type="email"
           value={email}
@@ -55,7 +55,7 @@ function Email({ setSentEmail }) {
       </div>
       <div>
         <button
-          style={buttonStyle}
+          style={authStyles.button}
           onClick={() => {
             if (!email) return
             setSentEmail(email)
@@ -75,13 +75,13 @@ function Email({ setSentEmail }) {
 function MagicCode({ sentEmail }) {
   const [code, setCode] = useState('')
   return (
-    <div style={formStyle}>
+    <div style={authStyles.form}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>
         Okay we sent you an email! What was the code?
       </h2>
       <div>
         <input
-          style={inputStyle}
+          style={authStyles.input}
           type="text"
           placeholder="Code plz"
           value={code}
@@ -89,7 +89,7 @@ function MagicCode({ sentEmail }) {
         />
       </div>
       <button
-        style={buttonStyle}
+        style={authStyles.button}
         onClick={() => {
           auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
             alert('Uh oh :' + err.body?.message)
@@ -103,37 +103,36 @@ function MagicCode({ sentEmail }) {
   )
 }
 
-const containerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-}
-
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100vh',
-  fontFamily: 'Arial, sans-serif',
-}
-
-const inputStyle = {
-  padding: '10px',
-  marginBottom: '15px',
-  border: '1px solid #ddd',
-  borderRadius: '5px',
-  width: '300px',
-}
-
-const buttonStyle = {
-  padding: '10px 20px',
-  backgroundColor: '#007bff',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
+const authStyles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    fontFamily: 'Arial, sans-serif',
+  },
+  input: {
+    padding: '10px',
+    marginBottom: '15px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
+    width: '300px',
+  },
+  button: {
+    padding: '10px 20px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
 }
 ```
 
