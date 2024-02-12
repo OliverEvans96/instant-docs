@@ -10,7 +10,11 @@ how you can do it with react.
 
 ```javascript {% showCopy=true %}
 import React, { useState } from 'react'
-import { auth, useAuth } from '@instantdb/react'
+import { init } from '@instantdb/react'
+
+const APP_ID = 'REPLACE ME'
+
+const { auth, useAuth } = init({ appId: APP_ID })
 
 function App() {
   const { isLoading, user, error } = useAuth()

@@ -5,11 +5,11 @@ title: Debug mode (React Only)
 When using react, every `useQuery` call returns a `debugRef` you can attach to your UI.
 
 ```javascript {% showCopy=true %}
-import { init, transact, tx, id, useQuery } from '@instantdb/react'
+import { init, tx, id } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
-init({ appId: APP_ID })
+const { useQuery, transact } = init({ appId: APP_ID })
 
 function App() {
   const {

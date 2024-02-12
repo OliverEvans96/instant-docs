@@ -10,7 +10,7 @@ import { init } from '@instantdb/react'
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
   return <Main />

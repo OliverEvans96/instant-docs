@@ -13,7 +13,7 @@ npm i @instantdb/core
 Now you can import the main functions:
 
 ```javascript
-import { init, getDB, subscribeQuery, transact, tx } from '@instantdb/core'
+import { init, transact, tx } from '@instantdb/core'
 ```
 
 ## init
@@ -23,7 +23,7 @@ import { init, getDB, subscribeQuery, transact, tx } from '@instantdb/core'
 ```javascript
 const APP_ID = 'REPLACE ME'
 
-init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 ```
 
 ## Writing Data
@@ -42,8 +42,6 @@ Now that you have your database up and running, you can subscribe to queries:
 
 ```javascript
 const query = { goals: {} }
-// get the database you inited
-const db = getDB()
 // subscribe a query
 const unsub = db.subscribeQuery(query, (resp) => {
   if (resp.error) {

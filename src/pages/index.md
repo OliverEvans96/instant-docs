@@ -27,12 +27,12 @@ Now open up `app/page.tsx` in your favorite editor and replace the entirity of t
 'use client'
 
 import { useState } from 'react'
-import { init, transact, tx, id, useQuery } from '@instantdb/react'
+import { init, tx, id } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({ appId: APP_ID })
+const { useQuery, transact } = init({ appId: APP_ID })
 
 function App() {
   const [visible, setVisible] = useState('all')
