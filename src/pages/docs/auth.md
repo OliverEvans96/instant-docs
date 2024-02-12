@@ -83,7 +83,7 @@ function MagicCode({ sentEmail }) {
         <input
           style={authStyles.input}
           type="text"
-          placeholder="Code plz"
+          placeholder="123456..."
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
