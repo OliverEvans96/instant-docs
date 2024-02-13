@@ -13,7 +13,7 @@ npm i @instantdb/core
 Now you can import the main functions:
 
 ```javascript
-import { init, transact, tx } from '@instantdb/core'
+import { init, tx } from '@instantdb/core'
 ```
 
 ## init
@@ -28,10 +28,10 @@ const db = init({ appId: APP_ID })
 
 ## Writing Data
 
-`transact` works the same too:
+`db.transact` works the same too:
 
 ```javascript
-transact([tx.goals[id()].update({ title: 'eat' })])
+db.transact([tx.goals[id()].update({ title: 'eat' })])
 ```
 
 To learn more writing transactions, check out the [**Writing Data**](/docs/instaml) section.

@@ -130,10 +130,10 @@ app.post('/custom_endpoint', async (req, res) => {
 In your frontend, the `user` object has a `refresh_token` property. You can pass this token on to your endpoint:
 
 ```javascript
-const { useAuth } = init(/* ... */)
+const db = init(/* ... */)
 
 function App() {
-  const { user } = useAuth();
+  const { user } = db.useAuth();
   // call your api with `user.refresh_token`
   function onClick() {
     myAPI.customEndpoint(user.refresh_token, ...);

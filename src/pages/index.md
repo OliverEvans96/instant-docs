@@ -32,13 +32,13 @@ import { init, tx, id } from '@instantdb/react'
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-const { useQuery, transact } = init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
   const [visible, setVisible] = useState('all')
 
   // Read Data
-  const { isLoading, error, data } = useQuery({ todos: {} })
+  const { isLoading, error, data } = db.useQuery({ todos: {} })
   if (isLoading) {
     return <div>Fetching data...</div>
   }
@@ -69,7 +69,7 @@ function App() {
 // Write Data
 // ---------
 function addTodo(text) {
-  transact(
+  db.transact(
     tx.todos[id()].update({
       text,
       done: false,
@@ -79,22 +79,22 @@ function addTodo(text) {
 }
 
 function deleteTodo(todo) {
-  transact(tx.todos[todo.id].delete())
+  db.transact(tx.todos[todo.id].delete())
 }
 
 function toggleDone(todo) {
-  transact(tx.todos[todo.id].update({ done: !todo.done }))
+  db.transact(tx.todos[todo.id].update({ done: !todo.done }))
 }
 
 function deleteCompleted(todos) {
   const completed = todos.filter((todo) => todo.done)
   const txs = completed.map((todo) => tx.todos[todo.id].delete())
-  transact(txs)
+  db.transact(txs)
 }
 
 function toggleAll(todos) {
   const newVal = !todos.every((todo) => todo.done)
-  transact(todos.map((todo) => tx.todos[todo.id].update({ done: newVal })))
+  db.transact(todos.map((todo) => tx.todos[todo.id].update({ done: newVal })))
 }
 
 // Components

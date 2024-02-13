@@ -14,10 +14,10 @@ import { init } from '@instantdb/react'
 
 const APP_ID = 'REPLACE ME'
 
-const { auth, useAuth } = init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
-  const { isLoading, user, error } = useAuth()
+  const { isLoading, user, error } = db.useAuth()
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -63,7 +63,7 @@ function Email({ setSentEmail }) {
           onClick={() => {
             if (!email) return
             setSentEmail(email)
-            auth.sendMagicCode({ email }).catch((err) => {
+            db.auth.sendMagicCode({ email }).catch((err) => {
               alert('Uh oh :' + err.body?.message)
               setSentEmail('')
             })
@@ -95,10 +95,12 @@ function MagicCode({ sentEmail }) {
       <button
         style={authStyles.button}
         onClick={() => {
-          auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
-            alert('Uh oh :' + err.body?.message)
-            setCode('')
-          })
+          db.auth
+            .signInWithMagicCode({ email: sentEmail, code })
+            .catch((err) => {
+              alert('Uh oh :' + err.body?.message)
+              setCode('')
+            })
         }}
       >
         Verify
@@ -155,7 +157,7 @@ On the client, `useAuth` will set `isLoading` to `false` and populate `user` -- 
 
 ```javascript
 function App() {
-  const { isLoading, user, error } = useAuth()
+  const { isLoading, user, error } = db.useAuth()
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -175,7 +177,7 @@ our `Main` component until a user is logged in
 ### auth.sendMagicCode
 
 ```javascript
-auth.sendMagicCode({ email }).catch((err) => {
+db.auth.sendMagicCode({ email }).catch((err) => {
   alert('Uh oh :' + err.body?.message)
   setState({ ...state, sentEmail: '' })
 })
@@ -186,7 +188,7 @@ Use `auth.sendMagicCode` to create a magic code on instant's backend and email a
 ### auth.signInWithMagicCode
 
 ```javascript
-auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
+db.auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
   alert('Uh oh :' + err.body?.message)
   setState({ ...state, code: '' })
 })
@@ -197,7 +199,7 @@ Use `auth.signInWithMagicCode` to validate codes with instant's backend.
 ### auth.signOut
 
 ```javascript
-auth.signOut()
+db.auth.signOut()
 ```
 
 Use `auth.signOut` to sign out users. This will restart the websocket connection and clear out the current user refresh token.

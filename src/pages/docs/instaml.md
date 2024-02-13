@@ -136,7 +136,7 @@ This creates:
 We can query associations in both directions via these links
 
 ```javascript
-const { isLoading, error, data } = useQuery({
+const { isLoading, error, data } = db.useQuery({
   goals: { todos: {} },
   todos: { goals: {} },
 })
@@ -180,7 +180,7 @@ db.transact([tx.todos[workoutId].unlink({ goals: healthId })])
 
 ## tx
 
-`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `transact`. It follows the format
+`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `db.transact`. It follows the format
 
 ```
 tx.NAMESPACE_LABEL[GLOBAL_UNIQUE_IDENTIFER].ACTION(ACTION_SPECIFIC_DATA)

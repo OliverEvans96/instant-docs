@@ -9,7 +9,7 @@ import { init, tx, id } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
-const { useQuery, transact } = init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
   const {
@@ -18,7 +18,7 @@ function App() {
     data,
     // 👇
     debugRef,
-  } = useQuery({ messages: {} })
+  } = db.useQuery({ messages: {} })
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -35,7 +35,7 @@ function App() {
       </div>
       <button
         style={{ padding: '8px', border: '1px solid white', color: 'white' }}
-        onClick={() => transact(tx.messages[id()].update({ text: 'Yo' }))}
+        onClick={() => db.transact(tx.messages[id()].update({ text: 'Yo' }))}
       >
         Send Yo
       </button>
