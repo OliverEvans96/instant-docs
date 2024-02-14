@@ -13,7 +13,7 @@ npm i @instantdb/core
 Now you can import the main functions:
 
 ```javascript
-import { init, getDB, subscribeQuery, transact, tx } from '@instantdb/core'
+import { init, tx } from '@instantdb/core'
 ```
 
 ## init
@@ -23,15 +23,15 @@ import { init, getDB, subscribeQuery, transact, tx } from '@instantdb/core'
 ```javascript
 const APP_ID = 'REPLACE ME'
 
-init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 ```
 
 ## Writing Data
 
-`transact` works the same too:
+`db.transact` works the same too:
 
 ```javascript
-transact([tx.goals[id()].update({ title: 'eat' })])
+db.transact([tx.goals[id()].update({ title: 'eat' })])
 ```
 
 To learn more writing transactions, check out the [**Writing Data**](/docs/instaml) section.
@@ -42,8 +42,6 @@ Now that you have your database up and running, you can subscribe to queries:
 
 ```javascript
 const query = { goals: {} }
-// get the database you inited
-const db = getDB()
 // subscribe a query
 const unsub = db.subscribeQuery(query, (resp) => {
   if (resp.error) {

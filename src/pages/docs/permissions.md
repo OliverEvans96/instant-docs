@@ -109,13 +109,13 @@ And we have a rules defined as
 Then we could create goals with existing attr types:
 
 ```javascript
-transact(tx.goals[id()).update({title: "Hello World"})
+db.transact(tx.goals[id()).update({title: "Hello World"})
 ```
 
 But we would not be able to create goals with new attr types:
 
 ```javascript
-transact(tx.goals[id()).update({title: "Hello World", priority: "high"})
+db.transact(tx.goals[id()).update({title: "Hello World", priority: "high"})
 ```
 
 ## CEL expressions

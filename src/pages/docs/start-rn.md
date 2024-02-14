@@ -19,16 +19,16 @@ npm i @react-native-async-storage/async-storage @react-native-community/netinfo 
 Now open up `src/App.js` in your favorite editor and replace the entirity of the file with the following code.
 
 ```javascript {% showCopy=true %}
-import { init, useQuery, transact, tx } from '@instantdb/react-native'
+import { init, tx } from '@instantdb/react-native'
 import { View, Text, Linking, Button, StyleSheet } from 'react-native'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
-  const { isLoading, error, data } = useQuery({ colors: {} })
+  const { isLoading, error, data } = db.useQuery({ colors: {} })
   if (isLoading) {
     return (
       <View>
@@ -63,7 +63,7 @@ function Main({ data }) {
               <Button
                 title={c}
                 onPress={() => {
-                  transact(tx.colors[selectId].update({ color: c }))
+                  db.transact(tx.colors[selectId].update({ color: c }))
                 }}
                 key={c}
               />

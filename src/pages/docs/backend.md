@@ -14,9 +14,9 @@ tweaks.
 ### init
 
 ```javascript
-import { init } from '@instantdb/admin'
+import { init, tx, id } from '@instantdb/admin'
 
-init({
+const db = init({
   appId: 'my-instant-app-id',
   adminToken: process.env.INSTANT_APP_ADMIN_TOKEN,
 })
@@ -42,8 +42,7 @@ if it accidently leaks.
 ### query
 
 ```javascript
-import { query } from '@instantdb/admin'
-const data = await query({ books: {}, users: {} })
+const data = await db.query({ books: {}, users: {} })
 const { books, users } = data
 ```
 
@@ -56,10 +55,8 @@ query once and returns a result.
 ### transact
 
 ```javascript
-import { tx, id, transact } from "@instantdb/admin"
-
 const today = format(new Date(), 'MM-dd-yyyy');
-const res  = await transact([
+const res  = await db.transact([
   tx.logs[id()].update({ date: today })
 ])
 console.log("New log entry made for" today, "with tx-id", res["tx-id"])
@@ -79,11 +76,9 @@ On the backend, `auth.createToken` lets you create users and generate login toke
 If you had an endpoint, here's how that could look:
 
 ```javascript
-import { auth } from '@instantdb/admin'
-
 app.post('/custom_sign_in', async (req, res) => {
   // ... your custom flow for users
-  const token = await auth.createToken(email)
+  const token = await db.auth.createToken(email)
   return res.status(200).send({ token })
 })
 ```
@@ -101,7 +96,7 @@ Right now we require that every user _must_ have an email. If you need to relax 
 Once you generate the token, you can pass it along to your frontend and sign in with `auth.signInWithToken`:
 
 ```javascript
-import {auth} from '@instantdb/react'
+const auth = init(/* ... */)
 
 async function handleSignIn() {
   // Get the token from your backend
@@ -122,7 +117,7 @@ In your endpoint, you can expect to receive `token`. You can then use `auth.veri
 ```javascript
 app.post('/custom_endpoint', async (req, res) => {
   // verify the token this user passed in
-  const user = await auth.verifyToken(req.headers['token'])
+  const user = await db.auth.verifyToken(req.headers['token'])
   if (!user) {
     return res.status(400).send('Uh oh, you are not authenticated')
   }
@@ -135,10 +130,10 @@ app.post('/custom_endpoint', async (req, res) => {
 In your frontend, the `user` object has a `refresh_token` property. You can pass this token on to your endpoint:
 
 ```javascript
-import { useAuth } from '@instantdb/react'
+const db = init(/* ... */)
 
 function App() {
-  const { user } = useAuth();
+  const { user } = db.useAuth();
   // call your api with `user.refresh_token`
   function onClick() {
     myAPI.customEndpoint(user.refresh_token, ...);

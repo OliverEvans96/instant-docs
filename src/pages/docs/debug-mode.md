@@ -5,11 +5,11 @@ title: Debug mode (React Only)
 When using react, every `useQuery` call returns a `debugRef` you can attach to your UI.
 
 ```javascript {% showCopy=true %}
-import { init, transact, tx, id, useQuery } from '@instantdb/react'
+import { init, tx, id } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
-init({ appId: APP_ID })
+const db = init({ appId: APP_ID })
 
 function App() {
   const {
@@ -18,7 +18,7 @@ function App() {
     data,
     // 👇
     debugRef,
-  } = useQuery({ messages: {} })
+  } = db.useQuery({ messages: {} })
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -35,7 +35,7 @@ function App() {
       </div>
       <button
         style={{ padding: '8px', border: '1px solid white', color: 'white' }}
-        onClick={() => transact(tx.messages[id()].update({ text: 'Yo' }))}
+        onClick={() => db.transact(tx.messages[id()].update({ text: 'Yo' }))}
       >
         Send Yo
       </button>

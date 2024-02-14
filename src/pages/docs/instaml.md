@@ -9,7 +9,7 @@ Instant uses a **Firebase-inspired** interface for mutations. We call our mutati
 We use the `update` action to create entities.
 
 ```javascript
-transact([tx.goals[id()].update({ title: 'eat' })])
+db.transact([tx.goals[id()].update({ title: 'eat' })])
 ```
 
 This creates a new `goal` with the following properties:
@@ -20,7 +20,7 @@ This creates a new `goal` with the following properties:
 Similar to NoSQL, you don't need to use the same schema for each entity in a namespace. After creating the previous goal you can run the following:
 
 ```javascript
-transact([
+db.transact([
   tx.goals[id()].update({
     priority: 'none',
     isSecret: true,
@@ -34,7 +34,7 @@ transact([
 You can store `strings`, `numbers,` `booleans`, `arrays`, and `objects` as values. You can also generate values via functions. Below is an example for picking a random goal title.
 
 ```javascript
-transact([
+db.transact([
   tx.goals[id()].update({
     title: ['eat', sleepId, 'hack', 'repeat'][Math.floor(Math.random() * 4)],
   }),
@@ -47,7 +47,7 @@ The `update` action is also used for updating entities. Suppose we had created t
 
 ```javascript
 const eatId = id()
-transact([
+db.transact([
   tx.goals[eatId].update({ priority: 'top', lastTimeEaten: 'Yesterday' }),
 ])
 ```
@@ -55,7 +55,7 @@ transact([
 We eat some food and decide to update the goal. We can do that like so:
 
 ```javascript
-transact([tx.goals[eatId].update({ lastTimeEaten: 'Today' })])
+db.transact([tx.goals[eatId].update({ lastTimeEaten: 'Today' })])
 ```
 
 This will only update the value of the `lastTimeEaten` attribute for entity `eat`.
@@ -65,7 +65,7 @@ This will only update the value of the `lastTimeEaten` attribute for entity `eat
 The `delete` action is used for deleting entities.
 
 ```javascript
-transact([tx.goals[eatId].delete()])
+db.transact([tx.goals[eatId].delete()])
 ```
 
 You can generate an array of `delete` txs to delete all entities in a namespace
@@ -73,10 +73,10 @@ You can generate an array of `delete` txs to delete all entities in a namespace
 ```javascript
 
 
-const { isLoading, error, data } = useQuery({goals: {}}
+const { isLoading, error, data } = db.useQuery({goals: {}}
 const { goals } = data;
 ...
-transact(goals.map(g => tx.goals[g.id].delete()));
+db.transact(goals.map(g => tx.goals[g.id].delete()));
 ```
 
 Calling `delete` on an entity also deletes its associations. So no need to worry about cleaning up previously created links.
@@ -88,7 +88,7 @@ Calling `delete` on an entity also deletes its associations. So no need to worry
 Suppose we create a `goal` and a `todo`.
 
 ```javascript
-transact([
+db.transact([
   tx.todos[workoutId].update({ title: 'Go on a run' }),
   tx.goals[healthId].update({ title: 'Get fit!' }),
 ])
@@ -97,13 +97,13 @@ transact([
 We can associate `healthId` with `workoutId` like so:
 
 ```javascript
-transact([tx.goals[healthId].link({ todos: workoutId })])
+db.transact([tx.goals[healthId].link({ todos: workoutId })])
 ```
 
 We could have done all this in one `transact` too via chaining transaction chunks.
 
 ```javascript
-transact([
+db.transact([
   tx.todos[workoutId].update({ title: 'Go on a run' }),
   tx.goals[healthId].update({ title: 'Get fit!' }).link({ todos: workoutId }),
 ])
@@ -112,7 +112,7 @@ transact([
 You can specify multiple ids in one `link` as well:
 
 ```javascript
-transact([
+db.transact([
   tx.todos[workoutId].update({ title: 'Go on a run' }),
   tx.todos[proteinId].update({ title: 'Drink protein' }),
   tx.todos[sleepId].update({ title: 'Go to bed early' }),
@@ -125,7 +125,7 @@ transact([
 Order matters when creating links.
 
 ```javascript
-transact([tx.goals[healthId].link({ todos: workoutId })])
+db.transact([tx.goals[healthId].link({ todos: workoutId })])
 ```
 
 This creates:
@@ -136,7 +136,7 @@ This creates:
 We can query associations in both directions via these links
 
 ```javascript
-const { isLoading, error, data } = useQuery({
+const { isLoading, error, data } = db.useQuery({
   goals: { todos: {} },
   todos: { goals: {} },
 })
@@ -149,7 +149,7 @@ const { goals, todos } = data
 Links can be removed via `unlink`
 
 ```javascript
-transact([tx.goals[healthId].unlink({ todos: workoutId })])
+db.transact([tx.goals[healthId].unlink({ todos: workoutId })])
 ```
 
 This removes both:
@@ -160,7 +160,7 @@ This removes both:
 We can `unlink` multiple ids too:
 
 ```javascript
-transact([
+db.transact([
   tx.goals[healthId].unlink({ todos: [workoutId, proteinId, sleepId] }),
   tx.goals[workId].unlink({ todos: [standupId, reviewPRsId, focusId] }),
 ])
@@ -169,18 +169,18 @@ transact([
 `unlink` can work in both directions. So this works:
 
 ```javascript
-transact([tx.goals[healthId].unlink({ todos: workoutId })])
+db.transact([tx.goals[healthId].unlink({ todos: workoutId })])
 ```
 
 And so does this!
 
 ```javascript
-transact([tx.todos[workoutId].unlink({ goals: healthId })])
+db.transact([tx.todos[workoutId].unlink({ goals: healthId })])
 ```
 
 ## tx
 
-`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `transact`. It follows the format
+`tx` is a [proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) which creates transaction chunks to be commited via `db.transact`. It follows the format
 
 ```
 tx.NAMESPACE_LABEL[GLOBAL_UNIQUE_IDENTIFER].ACTION(ACTION_SPECIFIC_DATA)
