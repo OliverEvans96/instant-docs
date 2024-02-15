@@ -46,7 +46,7 @@ function App() {
 export default App
 ```
 
-Launch your app and press `(cmd|ctrl) + shift + o` to toggle debug mode!
+Launch your app to see debug mode!
 
 This will bring up Instant's inspector pane and highlight all elements on the page with a `debugRef`. Hovering your cursor over an element will display useful information for the associated query in the inspector.
 
