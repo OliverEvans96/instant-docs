@@ -140,6 +140,8 @@ const authStyles = {
     cursor: 'pointer',
   },
 }
+
+export default App
 ```
 
 This creates a `Login` component to handle our auth flow. Of note is `auth.sendMagicCode`

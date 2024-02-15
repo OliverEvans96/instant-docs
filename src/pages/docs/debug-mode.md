@@ -42,6 +42,8 @@ function App() {
     </div>
   )
 }
+
+export default App
 ```
 
 Launch your app and press `(cmd|ctrl) + shift + o` to toggle debug mode!
