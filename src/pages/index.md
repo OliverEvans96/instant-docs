@@ -46,12 +46,10 @@ function App() {
     return <div>Error fetching data: {error.message}</div>
   }
 
-  const visibleTodos = data.todos
-    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-    .filter((todo) => {
-      if (visible === 'all') return true
-      return visible === 'remaining' ? !todo.done : todo.done
-    })
+  const visibleTodos = data.todos.filter((todo) => {
+    if (visible === 'all') return true
+    return visible === 'remaining' ? !todo.done : todo.done
+  })
 
   return (
     <div style={styles.container}>
