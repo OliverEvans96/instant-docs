@@ -9,6 +9,8 @@ them a login code on your behalf, and they authenticate with your app. Here's
 how you can do it with react.
 
 ```javascript {% showCopy=true %}
+'use client'
+
 import React, { useState } from 'react'
 import { init } from '@instantdb/react'
 
@@ -45,8 +47,19 @@ function Login() {
 
 function Email({ setSentEmail }) {
   const [email, setEmail] = useState('')
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!email) return
+    setSentEmail(email)
+    db.auth.sendMagicCode({ email }).catch((err) => {
+      alert('Uh oh :' + err.body?.message)
+      setSentEmail('')
+    })
+  }
+
   return (
-    <div style={authStyles.form}>
+    <form onSubmit={handleSubmit} style={authStyles.form}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>Let's log you in!</h2>
       <div>
         <input
@@ -58,30 +71,29 @@ function Email({ setSentEmail }) {
         />
       </div>
       <div>
-        <button
-          style={authStyles.button}
-          onClick={() => {
-            if (!email) return
-            setSentEmail(email)
-            db.auth.sendMagicCode({ email }).catch((err) => {
-              alert('Uh oh :' + err.body?.message)
-              setSentEmail('')
-            })
-          }}
-        >
+        <button type="submit" style={authStyles.button}>
           Send Code
         </button>
       </div>
-    </div>
+    </form>
   )
 }
 
 function MagicCode({ sentEmail }) {
   const [code, setCode] = useState('')
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    db.auth.signInWithMagicCode({ email: sentEmail, code }).catch((err) => {
+      alert('Uh oh :' + err.body?.message)
+      setCode('')
+    })
+  }
+
   return (
-    <div style={authStyles.form}>
+    <form onSubmit={handleSubmit} style={authStyles.form}>
       <h2 style={{ color: '#333', marginBottom: '20px' }}>
-        Okay we sent you an email! What was the code?
+        Okay, we sent you an email! What was the code?
       </h2>
       <div>
         <input
@@ -92,24 +104,14 @@ function MagicCode({ sentEmail }) {
           onChange={(e) => setCode(e.target.value)}
         />
       </div>
-      <button
-        style={authStyles.button}
-        onClick={() => {
-          db.auth
-            .signInWithMagicCode({ email: sentEmail, code })
-            .catch((err) => {
-              alert('Uh oh :' + err.body?.message)
-              setCode('')
-            })
-        }}
-      >
+      <button type="submit" style={authStyles.button}>
         Verify
       </button>
-    </div>
+    </form>
   )
 }
 
-const authStyles = {
+const authStyles: Record<string, React.CSSProperties> = {
   container: {
     display: 'flex',
     justifyContent: 'center',
