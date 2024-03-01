@@ -26,17 +26,19 @@ Now open up `app/page.tsx` in your favorite editor and replace the entirity of t
 ```javascript {% showCopy=true %}
 'use client'
 
-import { useState } from 'react'
 import { init, tx, id } from '@instantdb/react'
 
 // Visit https://instantdb.com/dash to get your APP_ID :)
 const APP_ID = 'REPLACE ME'
 
-const db = init({ appId: APP_ID })
+// Optional: Declare your schema for intellisense!
+type Schema = {
+  todos: Todo
+}
+
+const db = init<Schema>({ appId: APP_ID })
 
 function App() {
-  const [visible, setVisible] = useState('all')
-
   // Read Data
   const { isLoading, error, data } = db.useQuery({ todos: {} })
   if (isLoading) {
@@ -45,18 +47,13 @@ function App() {
   if (error) {
     return <div>Error fetching data: {error.message}</div>
   }
-
-  const visibleTodos = data.todos.filter((todo) => {
-    if (visible === 'all') return true
-    return visible === 'remaining' ? !todo.done : todo.done
-  })
-
+  const { todos } = data
   return (
     <div style={styles.container}>
       <div style={styles.header}>todos</div>
-      <TodoForm todos={data.todos} />
-      <TodoList todos={visibleTodos} />
-      <ActionBar todos={data.todos} setVisible={setVisible} />
+      <TodoForm todos={todos} />
+      <TodoList todos={todos} />
+      <ActionBar todos={todos} />
       <div style={styles.footer}>
         Open another tab to see todos update in realtime!
       </div>
@@ -66,38 +63,38 @@ function App() {
 
 // Write Data
 // ---------
-function addTodo(text) {
+function addTodo(text: string) {
   db.transact(
     tx.todos[id()].update({
       text,
       done: false,
-      createdAt: new Date(),
+      createdAt: Date.now(),
     })
   )
 }
 
-function deleteTodo(todo) {
+function deleteTodo(todo: Todo) {
   db.transact(tx.todos[todo.id].delete())
 }
 
-function toggleDone(todo) {
+function toggleDone(todo: Todo) {
   db.transact(tx.todos[todo.id].update({ done: !todo.done }))
 }
 
-function deleteCompleted(todos) {
+function deleteCompleted(todos: Todo[]) {
   const completed = todos.filter((todo) => todo.done)
   const txs = completed.map((todo) => tx.todos[todo.id].delete())
   db.transact(txs)
 }
 
-function toggleAll(todos) {
+function toggleAll(todos: Todo[]) {
   const newVal = !todos.every((todo) => todo.done)
   db.transact(todos.map((todo) => tx.todos[todo.id].update({ done: newVal })))
 }
 
 // Components
 // ----------
-function TodoForm({ todos }) {
+function TodoForm({ todos }: { todos: Todo[] }) {
   return (
     <div style={styles.form}>
       <div style={styles.toggleAll} onClick={() => toggleAll(todos)}>
@@ -121,7 +118,7 @@ function TodoForm({ todos }) {
   )
 }
 
-function TodoList({ todos }) {
+function TodoList({ todos }: { todos: Todo[] }) {
   return (
     <div style={styles.todoList}>
       {todos.map((todo) => (
@@ -151,40 +148,29 @@ function TodoList({ todos }) {
   )
 }
 
-function ActionBar({ setVisible, todos }) {
+function ActionBar({ todos }: { todos: Todo[] }) {
   return (
     <div style={styles.actionBar}>
-      <div># Remain: {todos.filter((todo) => !todo.done).length}</div>
-      <div>
-        <span
-          style={{ marginRight: '5px', cursor: 'pointer' }}
-          onClick={() => setVisible('all')}
-        >
-          All
-        </span>
-        <span
-          style={{ marginRight: '5px', cursor: 'pointer' }}
-          onClick={() => setVisible('remaining')}
-        >
-          Remaining
-        </span>
-        <span
-          style={{ cursor: 'pointer' }}
-          onClick={() => setVisible('completed')}
-        >
-          Completed
-        </span>
-      </div>
+      <div>Remaining todos: {todos.filter((todo) => !todo.done).length}</div>
       <div style={{ cursor: 'pointer' }} onClick={() => deleteCompleted(todos)}>
-        Clear Completed
+        Delete Completed
       </div>
     </div>
   )
 }
 
+// Types
+// ----------
+type Todo = {
+  id: string
+  text: string
+  done: boolean
+  createdAt: number
+}
+
 // Styles
 // ----------
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   container: {
     boxSizing: 'border-box',
     backgroundColor: '#fafafa',
@@ -198,13 +184,12 @@ const styles = {
   header: {
     letterSpacing: '2px',
     fontSize: '50px',
-    fontColor: 'lightgray',
+    color: 'lightgray',
     marginBottom: '10px',
   },
   form: {
     boxSizing: 'inherit',
     display: 'flex',
-    aignItems: 'center',
     border: '1px solid lightgray',
     borderBottomWidth: '0px',
     width: '350px',
