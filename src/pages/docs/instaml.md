@@ -140,6 +140,8 @@ const { isLoading, error, data } = db.useQuery({
 })
 
 const { goals, todos } = data
+console.log('goals with nested todos', goals)
+console.log('todos with nested goals', todos)
 ```
 
 ## Unlink
