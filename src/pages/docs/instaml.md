@@ -71,8 +71,6 @@ db.transact([tx.goals[eatId].delete()])
 You can generate an array of `delete` txs to delete all entities in a namespace
 
 ```javascript
-
-
 const { isLoading, error, data } = db.useQuery({goals: {}}
 const { goals } = data;
 ...
