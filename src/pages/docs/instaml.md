@@ -36,7 +36,7 @@ You can store `strings`, `numbers,` `booleans`, `arrays`, and `objects` as value
 ```javascript
 db.transact([
   tx.goals[id()].update({
-    title: ['eat', sleepId, 'hack', 'repeat'][Math.floor(Math.random() * 4)],
+    title: ['eat', 'sleep', 'hack', 'repeat'][Math.floor(Math.random() * 4)],
   }),
 ])
 ```
