@@ -84,19 +84,13 @@ Now that we’re familiar with namespaces, attributes, data, and links. we can s
 
 ## 1. Create Namespaces
 
-This is the most straight forward. After creating a new app in the dashboard you can simply press `Create` in the dashboard to add new namespaces.
-
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710522386620_image.png)
-
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710519466830_image.png)
-
-Create namespaces for `users`, `tweets`, `comments`, and `pins` and go to the next step!
+This is the most straight forward. After creating a new app in the dashboard you can simply press `+ Create` in the dashboard to add new namespaces.
 
 {% callout type="note" %}
 
 Aside from creating namespace in the explorer, namespaces are also automatically created the first time they are referenced when you call `transact` with `update`
 
-For example. **transact(tx.hello[id()].update(…)** will make a `hello` namespace if one did not exist already.
+For example. `transact(tx.hello[id()].update(…)` will make a `hello` namespace if one did not exist already.
 
 {% /callout %}
 
@@ -115,25 +109,19 @@ Let’s start by adding **data attributes** to `users`. You’ll notice an `id` 
 {% /callout %}
 
 Use the explorer in the Dashboard to create these data attributes. Here's the flow
-for creating `handle`
+for creating `handle`.
 
-**1: Click "Edit Schema" in the `users` namespace.**
+- 1: Click "Edit Schema" in the `users` namespace.
+- 2: Click "New Attribute"
+- 3: Configure away!
 
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710522460430_image.png)
-
-**2: Click "New Attribute"**
-
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517482772_image.png)
-
-**3: Configure away!**
-
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517344495_Screenshot+2024-03-15+at+11.42.19AM.png)
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517344495_Screenshot+2024-03-15+at+11.42.19AM.png" /%}
 
 {% callout type="note" %}
 
 Similar to namespaces, data attributes are automatically created the first time they are referenced when you call `transact` with `update`
 
-For example, **transact(tx.users[id()].update({newAttribute: "hello world!"})** will create `newAttribute` on `users` if `newAttribute` did not exist before.
+For example, `transact(tx.users[id()].update({newAttribute: "hello world!"})` will create `newAttribute` on `users` if `newAttribute` did not exist before.
 
 {% /callout %}
 
@@ -153,18 +141,18 @@ model:
 Again we can use the dashboard to set these up. Creating the `tweets` link attribute
 looks like
 
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517940534_image.png)
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517940534_image.png" /%}
 
 And the creating the `pins` link attribute looks like
 
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710518041250_image.png)
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710518041250_image.png" /%}
 
 When creating links, attributes will show up under both namespaces! If you inspect the `tweets` and `pins` namespaces in the explorer you should see both have an `author` attribute that links to `users`
 
 {% callout type="note" %}
 A many-to-many link attribute is automatically created the first time two namespaces are referenced when you call `transact` and `link`
 
-For example, **transact(tx.users[id].link({pets: petId})** will create an attribute `pets` on `users` and a `users` attribute on `pets`
+For example, `transact(tx.users[id].link({pets: petId})` will create an attribute `pets` on `users` and a `users` attribute on `pets`
 
 {% /callout %}
 
@@ -172,7 +160,7 @@ For example, **transact(tx.users[id].link({pets: petId})** will create an attrib
 
 You can always modify or delete attributes after creating them. In the previous step we created the link attribute `users.pins` but we can rename it to `users.pin` as shown below.
 
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710518379429_image.png)
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710518379429_image.png" /%}
 
 Similarly you can delete whole namespaces when editing their schema.
 
@@ -199,7 +187,7 @@ In the earlier sections we mentioned that new `namespaces` and `attributes` can 
 
 For our micro-twitter example, it would look like this in the dashboard:
 
-![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710519419773_image.png)
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710519419773_image.png" /%}
 
 With these permissions set you’ll still be able to make changes in the explorer, but client-side transactions that try to modify your schema will fail. This means your schema is safe from unwanted changes!
 

@@ -14,6 +14,15 @@ const tags = {
     },
     render: Callout,
   },
+  screenshot: {
+    selfClosing: true,
+    attributes: {
+      src: { type: String },
+    },
+    render: ({ src }) => (
+      <img src={src} className="rounded-md border p-4 shadow-md" />
+    ),
+  },
   figure: {
     selfClosing: true,
     attributes: {
