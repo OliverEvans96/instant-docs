@@ -201,7 +201,7 @@ In the earlier sections we mentioned that new `namespaces` and `attributes` can 
 }
 ```
 
-For our micro-twitter example, it would look like this in the explorer:
+For our micro-twitter example, it would look like this in the dashboard:
 
 ![](https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710519419773_image.png)
 
