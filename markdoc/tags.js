@@ -8,7 +8,7 @@ const tags = {
       type: {
         type: String,
         default: 'note',
-        matches: ['note', 'warning'],
+        matches: ['info', 'note', 'warning'],
         errorLevel: 'critical',
       },
     },
