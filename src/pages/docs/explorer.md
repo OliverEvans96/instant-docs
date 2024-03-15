@@ -7,7 +7,7 @@ title: Modeling data
 In this section we’ll learn how to model data using the Instant Explorer. By the end of this document you’ll know how to:
 
 - Create namespaces and attributes
-- Configure indexes, constraints, and relationship-types
+- Add indexes, unqiue constraints, and relationship-types
 - Lock down your schema for production
 
 We’ll build a micro-twitter to illustrate. Our aim is to create the following data model:
@@ -47,30 +47,26 @@ pins {
 
 ## Namespaces, attributes, data, and links.
 
-There are three core building blocks to modeling data with Instant.
+There are four core building blocks to modeling data with Instant.
 
-{% callout type="info" %}
-
-**Namespaces**
+**1) Namespaces**
 
 Namespaces house entities like `users`, `tweets`, `comments`, `pins`. They are equivalent to “tables” in relational databases or “collections” in NoSQL.
 
-**Attributes**
+**2) Attributes**
 
 Attributes are properties associated with namespaces like `id`, `email`, `tweets` for `users`. Attributes come in two flavors, **data** and **links**. They are equivalent to a “column” in relational databases or a “field” in NoSQL.
 
-**Data Attributes**
+**3) Data Attributes**
 
 Data attributes are facts about an entity. In our data model above these would be `id`, `email` , `handle` and `createdAt` for `users`
 
-**Link Attributes**
+**4) Link Attributes**
 
 Links connect two namespaces together. When you create a link you define a “name” and a “reverse attribute name.” For example the link between users and tweets
 
 - Has a **name** of “tweets” connecting **users** to their **tweets**
 - Has a **reverse name** of “author” connecting **tweets** to their **users**
-
-{% /callout %}
 
 Links can also have one of four relationship types: `many-to-many`, `many-to-one`, `one-to-many`, and `one-to-one`
 
