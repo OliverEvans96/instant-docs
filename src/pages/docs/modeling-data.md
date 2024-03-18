@@ -10,7 +10,7 @@ In this section we’ll learn how to model data using the Instant Explorer. By t
 - Add indexes, unqiue constraints, and relationship-types
 - Lock down your schema for production
 
-We’ll build a micro-twitter to illustrate. Our aim is to create the following data model:
+We’ll build a micro-blog to illustrate. Our aim is to create the following data model:
 
 ```javascript
 users {
@@ -18,11 +18,11 @@ users {
   email: string :is_unique,
   hande: string :is_unique :is_indexed,
   createdAt: number,
-  :has_many tweets
+  :has_many posts
   :has_one pin
 }
 
-tweets {
+posts {
   id: UUID,
   text: string,
   createdAt: number,
@@ -34,13 +34,13 @@ tweets {
 comments {
   id: UUID,
   text: string,
-  :belongs_to tweet,
+  :belongs_to post,
   :belongs_to author :through users
 }
 
 pins {
   id: UUID,
-  :has_one tweet,
+  :has_one post,
   :has_one author :through users
 }
 ```
@@ -51,11 +51,11 @@ There are four core building blocks to modeling data with Instant.
 
 **1) Namespaces**
 
-Namespaces house entities like `users`, `tweets`, `comments`, `pins`. They are equivalent to “tables” in relational databases or “collections” in NoSQL.
+Namespaces house entities like `users`, `posts`, `comments`, `pins`. They are equivalent to “tables” in relational databases or “collections” in NoSQL.
 
 **2) Attributes**
 
-Attributes are properties associated with namespaces like `id`, `email`, `tweets` for `users`. Attributes come in two flavors, **data** and **links**. They are equivalent to a “column” in relational databases or a “field” in NoSQL.
+Attributes are properties associated with namespaces like `id`, `email`, `posts` for `users`. Attributes come in two flavors, **data** and **links**. They are equivalent to a “column” in relational databases or a “field” in NoSQL.
 
 **3) Data Attributes**
 
@@ -63,20 +63,20 @@ Data attributes are facts about an entity. In our data model above these would b
 
 **4) Link Attributes**
 
-Links connect two namespaces together. When you create a link you define a “name” and a “reverse attribute name.” For example the link between users and tweets
+Links connect two namespaces together. When you create a link you define a “name” and a “reverse attribute name.” For example the link between users and posts
 
-- Has a **name** of “tweets” connecting **users** to their **tweets**
-- Has a **reverse name** of “author” connecting **tweets** to their **users**
+- Has a **name** of “posts” connecting **users** to their **posts**
+- Has a **reverse name** of “author” connecting **posts** to their **users**
 
 Links can also have one of four relationship types: `many-to-many`, `many-to-one`, `one-to-many`, and `one-to-one`
 
-Our micro-twitter example has the following relationship types:
+Our micro-blog example has the following relationship types:
 
-- **Many-to-one** between users and tweets
+- **Many-to-one** between users and posts
 - **One-to-one** between users and pins
-- **Many-to-one** between tweets and comments
+- **Many-to-one** between posts and comments
 - **Many-to-one** between users and comments
-- **One-to-one** between tweets and pins
+- **One-to-one** between posts and pins
 
 ---
 
@@ -103,7 +103,7 @@ Let’s start by adding **data attributes** to `users`. You’ll notice an `id` 
 {% callout type="info" %}
 `email` with a **unique constraint** so no two users have the same email
 
-`handle` with a **unique constraint** so no two users have the same handle, and also an **index** because our application will use `handle` for fetching tweets when browsing user profiles.
+`handle` with a **unique constraint** so no two users have the same handle, and also an **index** because our application will use `handle` for fetching posts when browsing user profiles.
 
 `createdAt` which doesn’t need any constraints or index.
 {% /callout %}
@@ -132,22 +132,22 @@ model:
 
 {% callout type="info" %}
 
-`users` can have many `tweets` , but `tweets` can only have one `users` via the label `author`
+`users` can have many `posts` , but `posts` can only have one `users` via the label `author`
 
 `users` can only have one `pins`, and `pins` can only have one `users` via the label `author`
 
 {% /callout %}
 
-Again we can use the dashboard to set these up. Creating the `tweets` link attribute
+Again we can use the dashboard to set these up. Creating the `posts` link attribute
 looks like
 
-{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710517940534_image.png" /%}
+{% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710784920480_image.png" /%}
 
-And the creating the `pins` link attribute looks like
+And creating the `pins` link attribute looks like
 
 {% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710518041250_image.png" /%}
 
-When creating links, attributes will show up under both namespaces! If you inspect the `tweets` and `pins` namespaces in the explorer you should see both have an `author` attribute that links to `users`
+When creating links, attributes will show up under both namespaces! If you inspect the `posts` and `pins` namespaces in the explorer you should see both have an `author` attribute that links to `users`
 
 {% callout type="note" %}
 A many-to-many link attribute is automatically created the first time two namespaces are referenced when you call `transact` and `link`
@@ -185,7 +185,7 @@ In the earlier sections we mentioned that new `namespaces` and `attributes` can 
 }
 ```
 
-For our micro-twitter example, it would look like this in the dashboard:
+For our micro-blog example, it would look like this in the dashboard:
 
 {% screenshot src="https://paper-attachments.dropboxusercontent.com/s_C781CC40E9D454E2FED6451745CECEBF732B63934549185154BCB3DAD0C7B532_1710519419773_image.png" /%}
 
