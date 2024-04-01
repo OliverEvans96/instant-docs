@@ -4,15 +4,13 @@ title: Presence and topics
 
 ## Introduction
 
-Modern apps require more than just a relational data store, developers need systems for managing session state and streams of events. Instant provides primitives for quickly building rich multiplayer experiences: rooms, presence and topics.
+Modern apps require more than a relational data store. To build rich real-time experiences, developers need systems for managing session state and streams of events. Instant provides primitives for quickly building rich multiplayer experiences: rooms, presence and topics. You can use these features to build typing indicators for a chat app like Discord, multiple cursors for a drawing board like Figma, user activity updates for document editors like Notion, or any other shared virtual space.
 
 You can think of presence as Instant-ified `setState`, and topics as Instant-ified event callbacks or `useEffect`.
 
 #### Rooms
 
 A room represents a shared context for realtime events. Users in the same room will receive updates from every other user in that room.
-
-Rooms can be used to model a document like Notion, a chat group like Discord, a drawing board like Figma, or any other shared virtual space.
 
 #### Presence
 
