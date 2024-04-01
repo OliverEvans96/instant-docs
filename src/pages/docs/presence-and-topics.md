@@ -4,9 +4,15 @@ title: Presence and topics
 
 ## Introduction
 
-Modern apps require more than just a relational data store, developers need systems for managing session state and streams of events. Instant provides two primites for quickly building rich multiplayer experiences: presence and topics.
+Modern apps require more than just a relational data store, developers need systems for managing session state and streams of events. Instant provides primitives for quickly building rich multiplayer experiences: rooms, presence and topics.
 
-You can think of presence as instant-ified `setState`, and topics as instant-ified event callbacks or `useEffect`.
+You can think of presence as Instant-ified `setState`, and topics as Instant-ified event callbacks or `useEffect`.
+
+#### Rooms
+
+A room represents a shared context for realtime events. Users in the same room will receive updates from every other user in that room.
+
+Rooms can be used to model a document like Notion, a chat group like Discord, a drawing board like Figma, or any other shared virtual space.
 
 #### Presence
 
@@ -14,7 +20,7 @@ Presence is an object that each peer shares with every other peer. When a user u
 
 Instant's cursor and typing indicator helpers are both built atop the presence API.
 
-#### Presence
+#### Topics
 
 Meanwhile, topics have "fire and forget" semantics, and are better suited for streams of data that don't need any sort of persistence. When a user publishes a topic, a callback is fired for every other user in the room listening for that topic.
 
@@ -43,7 +49,7 @@ const db = init<
 
 ## Presence
 
-Instant's `usePresence` is similar in feel to `useState`. it returns an object containing the current user's presence state, the presence state of every other user in the room, and a funtion (`publishPresence`) to update the current user's presence. `publishPresence` is similar to React's `setState`, and will merge the current and new presence objects.
+Instant's `usePresence` is similar in feel to `useState`. it returns an object containing the current user's presence state, the presence state of every other user in the room, and a function (`publishPresence`) to update the current user's presence. `publishPresence` is similar to React's `setState`, and will merge the current and new presence objects.
 
 ```javascript
 const { user, peers, publishPresence } = db.usePresence('example-room')
@@ -53,13 +59,13 @@ useEffect(() => {
 }, [])
 ```
 
-`usePresence` accepts a second paramer to select specific slices of user's presence object. For example `db.usePresence('example-room', { keys: ['status'] })` will only return the `status` value for each peer, and will only trigger an update when a user's `status` value changes (ignoring any other changes to presence). This is useful for optimizing re-renders in React.
+`usePresence` accepts a second parameter to select specific slices of user's presence object. For example `db.usePresence('example-room', { keys: ['status'] })` will only return the `status` value for each peer, and will only trigger an update when a user's `status` value changes (ignoring any other changes to presence). This is useful for optimizing re-renders in React.
 
 You may also specify and array of `peers` and a `user` flag to further constrain the output. If you wanted a "write-only" hook, it would look like this: `db.usePresence('example-room', { peers: [], user: false })`
 
 ## Topics
 
-Instat provides 2 hooks for sending and handling events for a given topic. `usePublishTopic` returns a function you can call to publihs an event, and `useTopicEffect` will be called each time a peer in the same room publishes an event for that topic.
+Instant provides 2 hooks for sending and handling events for a given topic. `usePublishTopic` returns a function you can call to publish an event, and `useTopicEffect` will be called each time a peer in the same room publishes an event for that topic.
 
 ```javascript
 const publishEmote = db.usePublishTopic('example-room', 'emotes')
