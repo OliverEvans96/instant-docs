@@ -2,17 +2,27 @@
 title: Presence and topics
 ---
 
-## Rooms
+## Introduction
 
-The tl;dr -
+Modern apps require more than just a relational data store, developers need systems for managing session state and streams of events. Instant provides two primites for quickly building rich multiplayer experiences: presence and topics.
 
-- Users can join rooms to publish presence and broadcast topics.
-- Each user can publish a presence object that is avaulable to all peers in a room and persists throught their session.
-- Users can broadcast messages to a room. Messages are grouped into topics. Rooms can have multiple topics.
+You can think of presence as instant-ified `setState`, and topics as instant-ified event callbacks or `useEffect`.
+
+#### Presence
+
+Presence is an object that each peer shares with every other peer. When a user updates their presence, it's instantly replicated to all users in that room. Presence persists throughout the remainder of a user's connection, and is automatically cleaned up when they leave the room
+
+Instant's cursor and typing indicator helpers are both built atop the presence API.
+
+#### Presence
+
+Meanwhile, topics have "fire and forget" semantics, and are better suited for streams of data that don't need any sort of persistence. When a user publishes a topic, a callback is fired for every other user in the room listening for that topic.
+
+The real-time emoji button panel on Instant's homepage is built using the topics API.
 
 ## Setup
 
-Both presence and topics require no setup beyond calling `init`, however you may provide typings as a generic parameter.
+Both presence and topics require no additional setup beyond calling `init()`, however you may provide typings as a generic parameter.
 
 ```typescript
 const db = init<
@@ -33,6 +43,8 @@ const db = init<
 
 ## Presence
 
+Instant's `usePresence` is similar in feel to `useState`. it returns an object containing the current user's presence state, the presence state of every other user in the room, and a funtion (`publishPresence`) to update the current user's presence. `publishPresence` is similar to React's `setState`, and will merge the current and new presence objects.
+
 ```javascript
 const { user, peers, publishPresence } = db.usePresence('example-room')
 
@@ -41,7 +53,13 @@ useEffect(() => {
 }, [])
 ```
 
+`usePresence` accepts a second paramer to select specific slices of user's presence object. For example `db.usePresence('example-room', { keys: ['status'] })` will only return the `status` value for each peer, and will only trigger an update when a user's `status` value changes (ignoring any other changes to presence). This is useful for optimizing re-renders in React.
+
+You may also specify and array of `peers` and a `user` flag to further constrain the output. If you wanted a "write-only" hook, it would look like this: `db.usePresence('example-room', { peers: [], user: false })`
+
 ## Topics
+
+Instat provides 2 hooks for sending and handling events for a given topic. `usePublishTopic` returns a function you can call to publihs an event, and `useTopicEffect` will be called each time a peer in the same room publishes an event for that topic.
 
 ```javascript
 const publishEmote = db.usePublishTopic('example-room', 'emotes')
@@ -49,11 +67,17 @@ const publishEmote = db.usePublishTopic('example-room', 'emotes')
 db.useTopicEffect('example-room', 'emote', (event, peer) => {
   // ...
 })
+
+return <button onClick={() => publishEmote({ emoji: '🔥' })}>🔥</button>
 ```
 
-## Turnkey helpers for React apps
+## Turnkey helpers (React web only)
+
+We wanted to make adding real-time features to your apps as simple as possible, so we shipped our React library with 2 drop-in utilities: `Cursors` and `useTypingIndicator`.
 
 ### Cursors
+
+Adding multiplayer cursors to your app is as simple as importing our `<Cursors>` component!
 
 ```javascript
 <Cursors
@@ -61,11 +85,26 @@ db.useTopicEffect('example-room', 'emote', (event, peer) => {
   roomId="example-room"
   spaceId="space-1"
   className="cursors"
-  currentUserColor
+  currentUserColor="tomato"
+>
+  {/* Your app here */}
+</Cursors>
+```
+
+Want to customize your cursors? No prob! Just provide a `renderCursor` function and return your own react element.
+
+```javascript
+<Cursors
+  db={db}
+  roomId="example-room"
+  spaceId="space-1"
+  className="cursors"
+  currentUserColor="papayawhip"
+  renderCursor={renderCoolCustomCursor}
 />
 ```
 
-You can render multiple cursor spaces. For instance, imagine you're building a screen with multiple tabs. You probably don't want to show peer's cursors unless they're viwing the same tab as the current user, so you can provide each `<Cursors />` element with their own `spaceId`.
+You can render multiple cursor spaces. For instance, imagine you're building a screen with multiple tabs. You probably don't want to show a peer's cursor unless they're on the same tab as the current user. You can provide each `<Cursors />` element with their own `spaceId`.
 
 ```javascript
 <Tabs>
@@ -105,6 +144,8 @@ You can even nest `<Cursors />`!
 ```
 
 ### Typing indicators
+
+`useTypingIndicator` is a small utility useful for building inputs for chat-style apps.
 
 ```javascript
 const { active, inputProps } = db.useTypingIndicator(
