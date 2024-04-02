@@ -2,11 +2,7 @@
 title: Auth
 ---
 
-[Magic Codes](#magic-codes)
-
-[Log in with Google](#log-in-with-google)
-
-[Custom Auth](#custom-auth)
+Instant comes with support for auth. We currently offer [magic codes](#magic-codes) and [Google OAuth](#log-in-with-google). If you want to build your own flow, you can use the [Admin SDK](#custom-auth).
 
 ## Magic Codes
 

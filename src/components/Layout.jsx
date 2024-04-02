@@ -28,10 +28,7 @@ const navigation = [
       { title: 'Writing data', href: '/docs/instaml' },
       { title: 'Reading data', href: '/docs/instaql' },
       { title: 'Modeling data', href: '/docs/modeling-data' },
-      {
-        title: 'Auth',
-        href: '/docs/auth',
-      },
+      { title: 'Auth', href: '/docs/auth' },
       { title: 'Permissions', href: '/docs/permissions' },
       { title: 'Instant on the Backend', href: '/docs/backend' },
       { title: 'Debug mode', href: '/docs/debug-mode' },
@@ -84,11 +81,7 @@ function Header({ navigation }) {
         <MobileNavigation navigation={navigation} />
       </div>
       <div className="relative flex flex-grow basis-0 items-center">
-        <Link
-          href="https://instantdb.com"
-          aria-label="Home page"
-          className="leading-none"
-        >
+        <Link href="https://instantdb.com" aria-label="Home page" className="leading-none">
           <Logo className="hidden h-9 w-auto fill-slate-700 dark:fill-sky-100 lg:block" />
         </Link>
       </div>
