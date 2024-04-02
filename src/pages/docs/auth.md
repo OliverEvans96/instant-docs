@@ -2,6 +2,8 @@
 title: Auth
 ---
 
+Instant comes with support for auth. We currently offer [magic codes](#magic-codes) and [Google OAuth](#log-in-with-google). If you want to build your own flow, you can use the [Admin SDK](#custom-auth).
+
 ## Magic Codes
 
 Instant supports a "magic-code" flow for auth. Users provide their email, we send
@@ -207,6 +209,55 @@ db.auth.signOut()
 ```
 
 Use `auth.signOut` to sign out users. This will restart the websocket connection and clear out the current user refresh token.
+
+## Log in with Google
+
+Instant supports logging in your users with their Google account.
+
+### Step 1: Create an OAuth client for Google
+
+Go to the [Google Console](https://console.cloud.google.com/apis/credentials).
+
+Click "+ CREATE CREDENTIALS"
+
+Select "OAuth client ID"
+
+Select "Web application" as the application type.
+
+Add `https://api.instantdb.com/runtime/oauth/callback` as an Authorized redirect URI.
+
+### Step 2: Register your OAuth client with Instant
+
+Go to the Instant dashboard and select the `Auth` tab for your app.
+
+Register a Google client and enter the client id and client secret from the OAuth client that you created.
+
+### Step 3: Register your website with Instant
+
+In the `Auth` tab, add the url of the websites where you are using Instant.
+
+### Step 4: Update your code
+
+Create an authorization URL
+
+```javascript
+const url = db.auth.createAuthorizationURL({
+  // The name of the client you chose when you created it on the
+  // Instant dashboard
+  clientName: 'google-web',
+  redirectURL: window.location.href,
+})
+```
+
+Use it in your login link:
+
+```jsx
+<a href={url}>Log in with Google</a>
+```
+
+When your users clicks on the link, they'll be redirected to Google to start the OAuth flow and then back to your site.
+
+Instant will automatically log them in to your app when they are redirected.
 
 ## Custom Auth
 
