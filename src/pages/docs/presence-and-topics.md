@@ -136,7 +136,7 @@ Adding multiplayer cursors to your app is as simple as importing our `<Cursors>`
 ```typescript
 <Cursors
   db={db}
-  room="document"
+  roomType="document"
   roomId="the-best-document-ever"
   spaceId="space-1"
   className="cursors"
@@ -168,7 +168,7 @@ You can render multiple cursor spaces. For instance, imagine you're building a s
     <Tab>
       <Cursors
         db={db}
-        room="document"
+        roomType="document"
         roomId="the-best-document-ever"
         spaceId={`tab-${tab.id}`}
         className="tab-cursor"
@@ -185,7 +185,7 @@ You can even nest `<Cursors />`!
 ```typescript
 <Cursors
   db={db}
-  room="document"
+  roomType="document"
   roomId="the-best-document-ever"
   spaceId="space-outer"
   userCursorColor="magenta"
@@ -193,7 +193,7 @@ You can even nest `<Cursors />`!
 >
   <Cursors
     db={db}
-    room="document"
+    roomType="document"
     roomId="the-best-document-ever"
     spaceId="space-inner"
     userCursorColor="blue"
