@@ -31,11 +31,6 @@ const navigation = [
       {
         title: 'Auth',
         href: '/docs/auth',
-        sections: [
-          { title: 'Magic Codes', hash: '#magic-codes' },
-          { title: 'Login with Google', hash: '#log-in-with-google' },
-          { title: 'Custom', hash: '#custom-auth' },
-        ],
       },
       { title: 'Permissions', href: '/docs/permissions' },
       { title: 'Instant on the Backend', href: '/docs/backend' },

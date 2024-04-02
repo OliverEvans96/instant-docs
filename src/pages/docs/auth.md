@@ -2,6 +2,12 @@
 title: Auth
 ---
 
+[Magic Codes](#magic-codes)
+
+[Log in with Google](#log-in-with-google)
+
+[Custom Auth](#custom-auth)
+
 ## Magic Codes
 
 Instant supports a "magic-code" flow for auth. Users provide their email, we send
