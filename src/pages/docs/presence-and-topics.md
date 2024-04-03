@@ -134,7 +134,9 @@ We wanted to make adding real-time features to your apps as simple as possible, 
 Adding multiplayer cursors to your app is as simple as importing our `<Cursors>` component!
 
 ```typescript
-<Cursors
+import { Cursors } from '@instantdb/react'
+
+;<Cursors
   db={db}
   roomType="document"
   roomId="the-best-document-ever"
