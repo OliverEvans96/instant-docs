@@ -220,6 +220,11 @@ Go to the [Google Console](https://console.cloud.google.com/apis/credentials).
 
 Click "+ CREATE CREDENTIALS"
 
+{% callout type="note" %}
+If you haven't already, configure your OAuth consent screen for External users.
+Once this is done, click "+ CREATE CREDENTIALS" again.
+{% /callout %}
+
 Select "OAuth client ID"
 
 Select "Web application" as the application type.
