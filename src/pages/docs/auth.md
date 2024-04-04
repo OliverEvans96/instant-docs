@@ -240,7 +240,7 @@ In the `Auth` tab, add the url of the websites where you are using Instant.
 
 Create an authorization URL
 
-```javascript
+```javascript {% showCopy=true %}
 const url = db.auth.createAuthorizationURL({
   // The name of the client you chose when you created it on the
   // Instant dashboard
