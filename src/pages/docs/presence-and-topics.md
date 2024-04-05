@@ -135,7 +135,6 @@ Adding multiplayer cursors to your app is as simple as importing our `<Cursors>`
 
 ```typescript
 import { Cursors } from '@instantdb/react'
-
 ;<Cursors
   db={db}
   roomType="document"
@@ -214,8 +213,7 @@ things like "Peer is typing..." in your chat app.
 const { active, inputProps } = db.useTypingIndicator(
   'chat',
   'chatRoomId',
-  'chat-input', // this is the label of the input field. Use this to differentiate between multiple inputs in the same room.
-  { handle, isTyping } // this is the slice of the presence object we want to track
+  'chat-input' // this is the name of the input field. Use this to differentiate between multiple inputs in the same room.
 )
 
 const whosTypingText = (active) => {
