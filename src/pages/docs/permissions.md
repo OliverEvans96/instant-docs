@@ -4,7 +4,7 @@ title: Permissions
 
 To secure user data, you can use Instant’s Rule Language. Our rule language
 takes inspiration from Rails’ Activerecord, Google’s CEL, and JSON.
-Here’s an example rulset below
+Here’s an example ruleset below
 
 ```json {% showCopy=true %}
 {
